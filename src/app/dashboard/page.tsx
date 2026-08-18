@@ -23,7 +23,7 @@ const PLAN_LABEL = { free: "Free plan", pro: "Pro plan", agency: "Agency plan" }
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams: { ws?: string; sent?: string };
+  searchParams: { ws?: string; sent?: string; login?: string };
 }) {
   const user = readSession(cookies().get(SESSION_COOKIE)?.value);
 
@@ -35,6 +35,9 @@ export default async function Dashboard({
           <p className="sub">We&rsquo;ll email you a magic link — no password needed.</p>
           {searchParams.sent && (
             <p className="notice-ok">Link sent! Check your email. It expires in 15 minutes.</p>
+          )}
+          {searchParams.login === "expired" && (
+            <p className="notice-warn">That sign-in link expired or was already used — request a fresh one below.</p>
           )}
           <form action={loginAction} className="dash-form">
             <input name="email" type="email" required placeholder="you@company.com" className="dash-input" />
