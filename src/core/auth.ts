@@ -9,6 +9,7 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { query, one } from "./db";
 import { sendEmail } from "./email";
+import { brandedEmail } from "./email-templates";
 
 const TOKEN_TTL_MIN = 15;
 const SESSION_TTL_DAYS = 30;
@@ -39,9 +40,14 @@ export async function requestLogin(email: string, appName: string): Promise<void
   await sendEmail({
     to: normalized,
     subject: `Your sign-in link for ${appName}`,
-    html: `<p>Click to sign in to ${appName}:</p>
-           <p><a href="${url}">Sign in</a> (expires in ${TOKEN_TTL_MIN} minutes)</p>
-           <p>If you didn't request this, ignore this email.</p>`,
+    html: brandedEmail({
+      preheader: `Your single-use sign-in link — expires in ${TOKEN_TTL_MIN} minutes.`,
+      heading: `Sign in to ${appName}`,
+      bodyHtml: `<p style="margin:0">Click the button below to sign in. The link is single-use and expires in <b>${TOKEN_TTL_MIN} minutes</b>.</p>`,
+      ctaLabel: `Sign in to ${appName}`,
+      ctaUrl: url,
+      footnote: `If you didn't request this email, you can safely ignore it — nobody can sign in without this link. Button not working? Paste this into your browser: ${url}`,
+    }),
   });
 }
 
