@@ -22,7 +22,7 @@ const PLAN_LABEL = { free: "Free plan", pro: "Pro plan", agency: "Agency plan" }
 export default async function Dashboard({
   searchParams,
 }: {
-  searchParams: { ws?: string };
+  searchParams: { ws?: string; sent?: string };
 }) {
   const user = readSession(cookies().get(SESSION_COOKIE)?.value);
 
@@ -31,6 +31,11 @@ export default async function Dashboard({
       <main style={wrap}>
         <h1>Sign in</h1>
         <p style={{ color: "#666" }}>We&rsquo;ll email you a magic link — no password.</p>
+        {searchParams.sent && (
+          <p style={{ background: "#e8f5ec", border: "1px solid #bfe3cc", color: "#1f7a43", padding: "10px 14px", borderRadius: 8, fontSize: 14.5 }}>
+            Link sent! Check your email for your sign-in link. It expires in 15 minutes.
+          </p>
+        )}
         <form action={loginAction} style={{ display: "flex", gap: 8 }}>
           <input name="email" type="email" required placeholder="you@company.com" style={inp} />
           <button style={btn}>Send link</button>
