@@ -4,7 +4,7 @@
   --bg-card: #ffffff;
   --ink: #1a1611;
   --ink-2: #57503f;
-  --ink-3: #8a8271;
+  --ink-3: #6d685b; /* WCAG AA: 4.83:1 on the warm gradient */
   --line: #e8e2d6;
   --amber: #e8960c;
   --amber-soft: #fdf3e0;
@@ -89,7 +89,7 @@ a { color: inherit; }
 .section { padding: 70px 0 0; }
 .section h2 { font-size: clamp(26px, 3.6vw, 34px); margin: 0 0 14px; }
 .section .lede { font-size: 17px; color: var(--ink-2); max-width: 640px; }
-.kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+.kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8a5c06; margin-bottom: 10px; } /* darkened amber: 5.05:1 (raw #e8960c was 2.08:1) */
 
 .pain { background: rgba(255,255,255,.88); border: 0; border-radius: 24px; padding: 30px 34px; margin-top: 26px; box-shadow: 0 2px 12px rgba(29,29,31,.05); }
 .pain ul { margin: 14px 0 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 8px; }
@@ -189,16 +189,16 @@ a { color: inherit; }
 .panel { background: rgba(255,255,255,.85); border: 0; border-radius: 26px; box-shadow: 0 2px 12px rgba(29,29,31,.05); margin-bottom: 24px; overflow: hidden; backdrop-filter: blur(4px); }
 .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 28px 4px; }
 .panel-head h2 { font-size: 19px; font-weight: 600; margin: 0; letter-spacing: -0.02em; }
-.panel-head .hint { font-size: 13px; color: #97938a; }
+.panel-head .hint { font-size: 13px; color: #74705f; } /* 4.89:1 on panel */
 .panel-head .count-big { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: -0.02em; }
 .panel-body { padding: 16px 28px 26px; }
 .panel-body.flush { padding: 10px 0 8px; }
-.panel-empty { padding: 26px 28px 30px; color: #97938a; font-size: 14px; text-align: center; }
+.panel-empty { padding: 26px 28px 30px; color: #74705f; font-size: 14px; text-align: center; }
 
 .frow { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 16px 28px; border-bottom: 1px dashed rgba(29,29,31,.13); }
 .frow:last-child { border-bottom: 0; }
 .frow .fname { font-weight: 600; color: #1d1d1f; font-size: 15px; }
-.frow .fmeta { font-size: 12.5px; color: #7a766d; margin-top: 4px; }
+.frow .fmeta { font-size: 12.5px; color: #6d685b; margin-top: 4px; } /* 5.46:1 on panel */
 .frow .fcode { font-size: 12px; color: #4a463e; background: #f2efe6; border-radius: 8px; padding: 2px 9px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
 .frow .fright { text-align: right; flex-shrink: 0; }
 .frow .fnum { font-size: 20px; font-weight: 600; font-family: var(--display); color: #1d1d1f; }
@@ -214,7 +214,7 @@ a { color: inherit; }
 .dash-input:focus { outline: 2px solid #f6cf4f66; border-color: #e8b90c; }
 .dash-btn { background: #1d1d1f; color: #fff; border: 0; border-radius: 999px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: transform .12s ease, background .12s ease; }
 .dash-btn:hover { background: #313134; transform: translateY(-1px); }
-.dash-btn:disabled { background: #cfccc3; cursor: not-allowed; transform: none; }
+.dash-btn:disabled { background: #dcd8cc; color: #55524a; cursor: not-allowed; transform: none; } /* 5.47:1 (disabled is WCAG-exempt, but keep it legible) */
 .dash-btn.yellow { background: #f6cf4f; color: #1d1d1f; }
 .dash-btn.yellow:hover { background: #f2c62f; }
 .dash-btn.green { background: #f6cf4f; color: #1d1d1f; }
@@ -231,8 +231,8 @@ a { color: inherit; }
 /* dark accent panel (pending approvals) */
 .panel.dark { background: #212123; color: #fff; box-shadow: 0 10px 30px rgba(29,29,31,.22); }
 .panel.dark .panel-head h2 { color: #fff; }
-.panel.dark .panel-head .hint { color: #8f8f94; }
-.panel.dark .panel-empty { color: #8f8f94; }
+.panel.dark .panel-head .hint { color: #9a9aa0; }
+.panel.dark .panel-empty { color: #9a9aa0; }
 .tcard-dash { padding: 18px 28px; border-bottom: 1px solid rgba(255,255,255,.09); }
 .tcard-dash:last-child { border-bottom: 0; }
 .tcard-dash .who { font-size: 13.5px; color: #a4a4a9; }
