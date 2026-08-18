@@ -49,9 +49,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <span>Proof<em>loft</em></span>
             </Link>
             <div className="nav-links">
+              <Link href="/#how">How it works</Link>
               <Link href="/#pricing">Pricing</Link>
+              <Link href="/#faq">FAQ</Link>
               <Link href="/vs/senja">vs Senja</Link>
-              <Link href="/vs/testimonial-to">vs Testimonial.to</Link>
+              <Link href="/dashboard">Sign in</Link>
               <Link href="/dashboard" className="btn btn-sm">Start free</Link>
             </div>
           </nav>
