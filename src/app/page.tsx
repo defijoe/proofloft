@@ -267,7 +267,7 @@ export default function Landing() {
       </section>
 
       {/* ---- FAQ: objection handling ---- */}
-      <section className="section wrap-narrow">
+      <section className="section wrap-narrow" id="faq">
         <p className="kicker">FAQ</p>
         <h2>The questions agencies actually ask</h2>
         <div className="faq">
