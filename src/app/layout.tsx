@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import NavAuth from "./nav-auth";
 import "./globals.css";
 
 export const metadata = {
@@ -53,8 +54,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <Link href="/#pricing">Pricing</Link>
               <Link href="/#faq">FAQ</Link>
               <Link href="/vs/senja">vs Senja</Link>
-              <Link href="/dashboard">Sign in</Link>
-              <Link href="/dashboard" className="btn btn-sm">Start free</Link>
+              <NavAuth />
             </div>
           </nav>
         </div>
