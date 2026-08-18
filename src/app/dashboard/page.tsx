@@ -94,12 +94,9 @@ export default async function Dashboard({
   return (
     <div className="dash">
       <div className="dash-wrap">
-        <div className="dash-head">
-          <div>
-            <h1>Dashboard</h1>
-            <p className="dash-sub">{user.email}</p>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <div className="dash-top">
+          <span className="dash-logo">Proof<em>loft</em></span>
+          <div className="dash-top-right">
             <span className={`plan-chip ${plan}`}><span className="dot" />{PLAN_LABEL[plan]}</span>
             {plan === "free" && (
               <form action={checkoutAction} style={{ display: "inline" }}>
@@ -110,28 +107,33 @@ export default async function Dashboard({
             {plan !== "agency" && (
               <form action={checkoutAction} style={{ display: "inline" }}>
                 <input type="hidden" name="plan" value="agency" />
-                <button className="dash-btn sm amber">Agency — $49/mo</button>
+                <button className="dash-btn sm yellow">Agency — $49/mo</button>
               </form>
             )}
           </div>
         </div>
 
-        <div className="stats">
-          <div className="stat">
+        <div className="dash-head">
+          <h1>Dashboard</h1>
+          <p className="dash-sub">{user.email}</p>
+        </div>
+
+        <div className="pstats">
+          <div className="pstat">
             <div className="lbl">Testimonials</div>
-            <div className="val">{totals?.total ?? 0}</div>
+            <div className="pill black">{totals?.total ?? 0}</div>
           </div>
-          <div className={`stat${nPending > 0 ? " warn" : ""}`}>
+          <div className="pstat">
             <div className="lbl">Pending approval</div>
-            <div className="val">{nPending}</div>
+            <div className="pill yellow">{nPending}</div>
           </div>
-          <div className="stat">
+          <div className="pstat">
             <div className="lbl">Forms</div>
-            <div className="val">{totals?.forms ?? 0}{!paid && <em> / 1 free</em>}</div>
+            <div className="pill hatch">{totals?.forms ?? 0}{!paid && <em>/ 1 free</em>}</div>
           </div>
-          <div className="stat">
+          <div className="pstat">
             <div className="lbl">Client workspaces</div>
-            <div className="val">{plan === "agency" ? workspaces.length : <em>Agency plan</em>}</div>
+            <div className="pill line">{plan === "agency" ? workspaces.length : <em>Agency plan</em>}</div>
           </div>
         </div>
 
@@ -185,7 +187,7 @@ export default async function Dashboard({
                   </div>
                 </div>
                 <div className="fright">
-                  <div style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--display)", color: "#0f172a" }}>{f.total}</div>
+                  <div className="fnum">{f.total}</div>
                   {Number(f.pending) > 0
                     ? <span className="badge-count">{f.pending} pending</span>
                     : <span className="badge-zero">approved</span>}
@@ -193,7 +195,7 @@ export default async function Dashboard({
               </div>
             ))}
           </div>
-          <div className="panel-body" style={{ borderTop: forms.length ? "1px solid #eef2f7" : undefined }}>
+          <div className="panel-body" style={{ borderTop: forms.length ? "1px dashed rgba(29,29,31,.13)" : undefined, paddingTop: 20 }}>
             <form action={createFormAction} className="dash-form">
               {activeWs && <input type="hidden" name="workspace_id" value={activeWs.id} />}
               <input
@@ -213,23 +215,23 @@ export default async function Dashboard({
           </div>
         </div>
 
-        <div className="panel">
+        <div className="panel dark">
           <div className="panel-head">
             <h2>Pending approval</h2>
-            <span className="hint">Approved testimonials appear on your walls</span>
+            <span className="count-big">{nPending}</span>
           </div>
           <div className="panel-body flush">
-            {pendingItems.length === 0 && <div className="panel-empty">Nothing pending. 🎉</div>}
+            {pendingItems.length === 0 && <div className="panel-empty">Nothing pending — approved testimonials appear on your walls. 🎉</div>}
             {pendingItems.map((t) => (
               <div className="tcard-dash" key={t.id}>
                 <div className="who">
                   <b>{t.author_name}</b>{t.author_title ? ` · ${t.author_title}` : ""} on <i>{t.form_name}</i>
-                  {t.rating ? <span style={{ color: "#e8960c", marginLeft: 8, letterSpacing: 2 }}>{"★".repeat(t.rating)}</span> : null}
+                  {t.rating ? <span className="stars-inline">{"★".repeat(t.rating)}</span> : null}
                 </div>
                 <blockquote>{t.body}</blockquote>
                 <form action={approveAction}>
                   <input type="hidden" name="id" value={t.id} />
-                  <button className="dash-btn sm green">Approve &amp; publish</button>
+                  <button className="dash-btn sm yellow">Approve &amp; publish</button>
                 </form>
               </div>
             ))}
