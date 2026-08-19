@@ -12,7 +12,7 @@ export default function Privacy() {
       <p className="kicker">Legal</p>
       <h2 style={{ fontSize: "clamp(28px, 4vw, 38px)" }}>Privacy Policy</h2>
       <div className="legal">
-        <span className="updated">Last updated: August 18, 2026</span>
+        <span className="updated">Last updated: August 19, 2026</span>
 
         <h2>1. Overview</h2>
         <p>
@@ -26,7 +26,7 @@ export default function Privacy() {
         <ul>
           <li><b>Account data:</b> your email address (used for magic-link sign-in) and your plan/subscription status.</li>
           <li><b>Testimonial submissions:</b> the name, role/title, star rating, and testimonial text a submitter chooses to provide, plus a timestamped record of their consent to publish.</li>
-          <li><b>Billing data:</b> handled by Lemon Squeezy as merchant of record. We never see or store full payment card details — we receive only subscription status and the billing email.</li>
+          <li><b>Billing data:</b> handled by Stripe. We never see or store full payment card details — we receive only subscription status, plan, and the billing email.</li>
           <li><b>Technical logs:</b> standard server logs (IP address, timestamps, requested pages) kept briefly for security and debugging.</li>
         </ul>
         <p>
@@ -55,8 +55,8 @@ export default function Privacy() {
         <ul>
           <li><b>Netlify</b> — application hosting and delivery</li>
           <li><b>Neon</b> — database hosting (Postgres, US region)</li>
-          <li><b>Resend</b> — transactional email delivery</li>
-          <li><b>Lemon Squeezy</b> — payments, tax, and invoicing (merchant of record)</li>
+          <li><b>Resend</b> — transactional email delivery and inbound email forwarding</li>
+          <li><b>Stripe</b> — payment processing, tax calculation, and invoicing</li>
         </ul>
         <p>Each provider processes data under its own security and privacy commitments. We never share your data with advertisers or data brokers.</p>
 
