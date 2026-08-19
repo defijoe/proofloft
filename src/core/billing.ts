@@ -1,92 +1,129 @@
 /**
- * Lemon Squeezy (Merchant of Record) billing.
+ * Stripe billing. Media Yard LLC is the merchant of record; Stripe Tax can be
+ * enabled in the dashboard to automate tax calculation/collection.
  *
- * Why MoR: Lemon Squeezy is the legal seller. Global VAT / sales-tax registration,
- * collection, remittance, invoices, dunning and refunds are THEIR obligation.
- * A solo operator should never be the merchant of record. Swappable for
- * Paddle/Polar — keep this interface, change the internals.
+ * Zero-SDK by design: Stripe's REST API over fetch (form-encoded), signature
+ * verification with node:crypto. Same public interface as the previous
+ * Lemon Squeezy module, so the rest of the app is unchanged.
  *
- * Setup: create a Product + Variant in LS, put the variant id in env, point the
- * LS webhook at /api/billing/webhook with LEMONSQUEEZY_WEBHOOK_SECRET.
+ * Env: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+ *      STRIPE_PRO_PRICE_ID, STRIPE_AGENCY_PRICE_ID,
+ *      optional STRIPE_PRO_ANNUAL_PRICE_ID / STRIPE_AGENCY_ANNUAL_PRICE_ID.
  */
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { query, one } from "./db";
 
-const LS_API = "https://api.lemonsqueezy.com/v1";
+const STRIPE_API = "https://api.stripe.com/v1";
 
-/** Hosted checkout URL for a user. LS handles payment UI, tax, receipts. */
+function stripeKey(): string {
+  const k = process.env.STRIPE_SECRET_KEY;
+  if (!k) throw new Error("STRIPE_SECRET_KEY missing");
+  return k;
+}
+
+/** Hosted Stripe Checkout URL for a subscription. */
 export async function createCheckoutUrl(opts: {
-  variantId: string;
+  priceId: string;
   userEmail: string;
   userId: number;
 }): Promise<string> {
-  const res = await fetch(`${LS_API}/checkouts`, {
+  const params = new URLSearchParams({
+    mode: "subscription",
+    "line_items[0][price]": opts.priceId,
+    "line_items[0][quantity]": "1",
+    customer_email: opts.userEmail,
+    client_reference_id: String(opts.userId),
+    "subscription_data[metadata][user_id]": String(opts.userId),
+    success_url: `${process.env.APP_URL}/dashboard?upgraded=1`,
+    cancel_url: `${process.env.APP_URL}/dashboard`,
+    allow_promotion_codes: "true",
+  });
+
+  const res = await fetch(`${STRIPE_API}/checkout/sessions`, {
     method: "POST",
     headers: {
-      Accept: "application/vnd.api+json",
-      "Content-Type": "application/vnd.api+json",
-      Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+      Authorization: `Bearer ${stripeKey()}`,
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({
-      data: {
-        type: "checkouts",
-        attributes: {
-          checkout_data: {
-            email: opts.userEmail,
-            custom: { user_id: String(opts.userId) },
-          },
-        },
-        relationships: {
-          store: { data: { type: "stores", id: process.env.LEMONSQUEEZY_STORE_ID } },
-          variant: { data: { type: "variants", id: opts.variantId } },
-        },
-      },
-    }),
+    body: params.toString(),
   });
-  if (!res.ok) throw new Error(`LS checkout failed: ${res.status} ${await res.text()}`);
-  const json = (await res.json()) as { data: { attributes: { url: string } } };
-  return json.data.attributes.url;
+  if (!res.ok) throw new Error(`Stripe checkout failed: ${res.status} ${await res.text()}`);
+  const json = (await res.json()) as { url: string };
+  return json.url;
 }
 
-/** Verify X-Signature header (HMAC-SHA256 of raw body). ALWAYS verify before trusting. */
+/**
+ * Verify the Stripe-Signature header: HMAC-SHA256 of "<t>.<payload>" with the
+ * webhook signing secret; header format "t=<ts>,v1=<sig>[,v1=...]".
+ * Rejects events older than 5 minutes (replay protection).
+ */
 export function verifyWebhookSignature(rawBody: string, signatureHeader: string | null): boolean {
   if (!signatureHeader) return false;
-  const digest = createHmac("sha256", process.env.LEMONSQUEEZY_WEBHOOK_SECRET ?? "")
-    .update(rawBody)
-    .digest("hex");
-  const a = Buffer.from(digest);
-  const b = Buffer.from(signatureHeader);
-  return a.length === b.length && timingSafeEqual(a, b);
+  const secret = process.env.STRIPE_WEBHOOK_SECRET ?? "";
+  if (!secret) return false;
+
+  const parts = new Map<string, string[]>();
+  for (const kv of signatureHeader.split(",")) {
+    const [k, v] = kv.split("=", 2).map((s) => s?.trim());
+    if (!k || !v) continue;
+    parts.set(k, [...(parts.get(k) ?? []), v]);
+  }
+  const t = parts.get("t")?.[0];
+  const sigs = parts.get("v1") ?? [];
+  if (!t || sigs.length === 0) return false;
+  if (Math.abs(Date.now() / 1000 - Number(t)) > 300) return false;
+
+  const expected = createHmac("sha256", secret).update(`${t}.${rawBody}`).digest("hex");
+  const a = Buffer.from(expected);
+  return sigs.some((s) => {
+    const b = Buffer.from(s);
+    return a.length === b.length && timingSafeEqual(a, b);
+  });
 }
 
-/** Idempotent upsert of subscription state from a webhook payload. */
+/** Map Stripe subscription statuses onto the app's paid-state vocabulary. */
+function mapStatus(s: string): string {
+  if (s === "trialing") return "on_trial";
+  return s; // active | past_due | canceled | unpaid | incomplete | ...
+}
+
+/** Idempotent upsert of subscription state from a Stripe webhook event. */
 export async function handleWebhook(rawBody: string): Promise<void> {
-  const payload = JSON.parse(rawBody);
-  const eventName: string = payload?.meta?.event_name ?? "unknown";
+  const event = JSON.parse(rawBody);
+  const eventName: string = event?.type ?? "unknown";
 
   await query(
-    `insert into webhook_log (provider, event_name, payload) values ('lemonsqueezy', $1, $2)`,
+    `insert into webhook_log (provider, event_name, payload) values ('stripe', $1, $2)`,
     [eventName, rawBody]
   );
 
-  if (!eventName.startsWith("subscription_")) return;
+  // Subscription lifecycle events carry everything we need.
+  if (!eventName.startsWith("customer.subscription.")) return;
 
-  const attrs = payload?.data?.attributes ?? {};
-  const subId: string = String(payload?.data?.id ?? "");
-  const customUserId = payload?.meta?.custom_data?.user_id;
-  const email: string | undefined = attrs.user_email;
+  const sub = event?.data?.object ?? {};
+  const subId: string = String(sub.id ?? "");
+  const priceId: string = String(sub?.items?.data?.[0]?.price?.id ?? "");
+  const status: string = mapStatus(String(sub.status ?? "unknown"));
+  const metaUserId = sub?.metadata?.user_id;
+  const email: string | undefined = undefined; // subscription objects don't carry email; user_id metadata is set at checkout
 
-  // Resolve the user: prefer the custom user_id we attached at checkout, fall back to email.
-  let userId: number | null = customUserId ? Number(customUserId) : null;
+  let userId: number | null = metaUserId ? Number(metaUserId) : null;
   if (!userId && email) {
     const u = await one<{ id: number }>(
       `insert into users (email) values ($1)
        on conflict (email) do update set email = excluded.email returning id`,
-      [email.toLowerCase()]
+      [email]
     );
     userId = u?.id ?? null;
   }
   if (!userId || !subId) return;
+
+  const renewsAt = sub.current_period_end ? new Date(sub.current_period_end * 1000).toISOString() : null;
+  const endsAt = sub.ended_at
+    ? new Date(sub.ended_at * 1000).toISOString()
+    : sub.cancel_at
+      ? new Date(sub.cancel_at * 1000).toISOString()
+      : null;
 
   await query(
     `insert into subscriptions (user_id, provider_sub_id, variant_id, status, renews_at, ends_at, updated_at)
@@ -97,19 +134,12 @@ export async function handleWebhook(rawBody: string): Promise<void> {
        renews_at = excluded.renews_at,
        ends_at = excluded.ends_at,
        updated_at = now()`,
-    [
-      userId,
-      subId,
-      String(attrs.variant_id ?? ""),
-      String(attrs.status ?? "unknown"),
-      attrs.renews_at ?? null,
-      attrs.ends_at ?? null,
-    ]
+    [userId, subId, priceId, status, renewsAt, endsAt]
   );
 
   await query(
     `update webhook_log set processed = true
-     where id = (select max(id) from webhook_log where provider = 'lemonsqueezy')`
+     where id = (select max(id) from webhook_log where provider = 'stripe')`
   );
 }
 
@@ -126,8 +156,8 @@ export async function isPro(userId: number): Promise<boolean> {
 export type Plan = "free" | "pro" | "agency";
 
 /**
- * Plan tier. The LS variant on the active subscription decides:
- * LEMONSQUEEZY_AGENCY_VARIANT_ID → agency, any other paid variant → pro.
+ * Plan tier. The Stripe price on the active subscription decides:
+ * an Agency price id → agency, any other paid price → pro.
  */
 export async function getPlan(userId: number): Promise<Plan> {
   const row = await one<{ variant_id: string | null }>(
@@ -137,7 +167,12 @@ export async function getPlan(userId: number): Promise<Plan> {
     [userId]
   );
   if (!row) return "free";
-  const agencyVariant = process.env.LEMONSQUEEZY_AGENCY_VARIANT_ID;
-  if (agencyVariant && row.variant_id === agencyVariant) return "agency";
+  const agencyIds = [
+    process.env.STRIPE_AGENCY_PRICE_ID,
+    process.env.STRIPE_AGENCY_ANNUAL_PRICE_ID,
+    // Back-compat: honor the old Lemon Squeezy variant if it's still configured.
+    process.env.LEMONSQUEEZY_AGENCY_VARIANT_ID,
+  ].filter(Boolean);
+  if (row.variant_id && agencyIds.includes(row.variant_id)) return "agency";
   return "pro";
 }
