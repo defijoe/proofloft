@@ -97,14 +97,14 @@ export async function approveAction(formData: FormData) {
 export async function checkoutAction(formData: FormData) {
   const user = currentUser();
   const plan = String(formData.get("plan") ?? "pro");
-  const variantId =
+  const priceId =
     plan === "agency"
-      ? process.env.LEMONSQUEEZY_AGENCY_VARIANT_ID
-      : process.env.LEMONSQUEEZY_PRO_VARIANT_ID;
-  if (!variantId) throw new Error(`No variant configured for plan: ${plan}`);
+      ? process.env.STRIPE_AGENCY_PRICE_ID
+      : process.env.STRIPE_PRO_PRICE_ID;
+  if (!priceId) throw new Error(`No Stripe price configured for plan: ${plan}`);
 
   const url = await createCheckoutUrl({
-    variantId,
+    priceId,
     userEmail: user.email,
     userId: user.id,
   });
