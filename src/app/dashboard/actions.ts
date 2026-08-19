@@ -6,7 +6,10 @@ import { revalidatePath } from "next/cache";
 import {
   readSession,
   SESSION_COOKIE,
+  sessionCookieOptions,
+  createSessionCookie,
   requestLogin,
+  verifyLoginCode,
   query,
   one,
   createCheckoutUrl,
@@ -31,6 +34,15 @@ export async function loginAction(formData: FormData) {
     console.error("[login] magic-link send failed:", e);
   }
   redirect("/dashboard?sent=1");
+}
+
+export async function codeLoginAction(formData: FormData) {
+  const email = String(formData.get("email") ?? "");
+  const code = String(formData.get("code") ?? "");
+  const user = await verifyLoginCode(email, code);
+  if (!user) redirect("/dashboard?sent=1&code=bad");
+  cookies().set(SESSION_COOKIE, createSessionCookie(user!), sessionCookieOptions);
+  redirect("/dashboard");
 }
 
 export async function createWorkspaceAction(formData: FormData) {
