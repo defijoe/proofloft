@@ -10,6 +10,7 @@ import {
   query,
   one,
   createCheckoutUrl,
+  createBillingPortalUrl,
   isPro,
   getPlan,
   track,
@@ -93,6 +94,20 @@ export async function approveAction(formData: FormData) {
     [id, user.id]
   );
   revalidatePath("/dashboard");
+}
+
+export async function billingPortalAction() {
+  const user = currentUser();
+  let url: string | null = null;
+  try {
+    url = await createBillingPortalUrl(user.id);
+  } catch (e) {
+    // Most likely cause: Customer Portal not activated in the Stripe dashboard yet.
+    console.error("[billing] portal session failed:", e);
+    redirect("/dashboard/account?portal=error");
+  }
+  if (!url) redirect("/dashboard/account?portal=none");
+  redirect(url!);
 }
 
 export async function checkoutAction(formData: FormData) {
