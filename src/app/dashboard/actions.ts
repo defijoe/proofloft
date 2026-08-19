@@ -25,8 +25,9 @@ export async function loginAction(formData: FormData) {
   const email = String(formData.get("email") ?? "");
   try {
     await requestLogin(email, "Proofloft");
-  } catch {
-    /* uniform response */
+  } catch (e) {
+    // Response stays uniform (anti-enumeration), but the failure must be observable.
+    console.error("[login] magic-link send failed:", e);
   }
   redirect("/dashboard?sent=1");
 }
