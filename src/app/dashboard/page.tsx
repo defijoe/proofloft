@@ -152,6 +152,41 @@ export default async function Dashboard({
           <p className="dash-sub">{user.email}</p>
         </div>
 
+        {Number(totals?.total ?? 0) === 0 && (
+          <div className="panel guide">
+            <div className="panel-head">
+              <h2>Quick start — from zero to a wall of love</h2>
+              <span className="hint">This guide disappears after your first testimonial</span>
+            </div>
+            <div className="panel-body">
+              <ol className="guide-steps">
+                <li>
+                  <b>Create a form</b> for a project or client below — e.g. &ldquo;Acme website redesign&rdquo;.
+                  {plan === "agency" && <> Group forms into a <b>client workspace</b> per engagement to keep things tidy.</>}
+                </li>
+                <li>
+                  <b>Share the form link</b> ({`proofloft.com/f/…`}) with the people whose praise you want —
+                  your client after a project wraps, or their customers. They write a short testimonial,
+                  pick a star rating, and tick a consent box. No account needed on their side.
+                </li>
+                <li>
+                  <b>Approve what you like.</b> New submissions land in <b>Pending approval</b> at the bottom
+                  of this page (you also get an email). Nothing goes public until you approve it.
+                </li>
+                <li>
+                  <b>Show them off.</b> Every form has a hosted wall page you can link from proposals or
+                  invoices, and an embed snippet that drops the same wall into any website — copy it from
+                  the form row below.
+                </li>
+              </ol>
+              <p className="guide-tip">
+                Tip: open your own form link and submit a test testimonial right now — you&rsquo;ll see the whole
+                loop (submit → email → approve → wall) in under a minute.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="pstats">
           <div className="pstat">
             <div className="lbl">Testimonials</div>
@@ -216,8 +251,13 @@ export default async function Dashboard({
                     {f.ws_name && !activeWs && <span className="ws-tag">{f.ws_name}</span>}
                   </div>
                   <div className="fmeta">
-                    Share: <span className="fcode">/f/{f.slug}</span>{" "}
-                    · Embed: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="/embed.js" async></script>`}</span>
+                    <a href={`/f/${f.slug}`} target="_blank" className="flink">Open form ↗</a>
+                    {" · "}
+                    <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>
+                    {" · "}Share: <span className="fcode">/f/{f.slug}</span>
+                  </div>
+                  <div className="fmeta">
+                    Embed the wall: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
                   </div>
                 </div>
                 <div className="fright">
