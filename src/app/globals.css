@@ -328,3 +328,11 @@ a { color: inherit; }
 .acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
 .dash-input.code { flex: 0 0 130px; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .25em; text-align: center; font-weight: 700; }
 .signin-alt { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; }
+
+/* ---------- quick-start guide + form-row links ---------- */
+.guide-steps { margin: 0; padding-left: 22px; display: grid; gap: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.65; }
+.guide-steps li::marker { font-weight: 700; color: #8a5c06; }
+.guide-steps b { color: var(--ink); }
+.guide-tip { background: #faeec6; border-radius: 14px; padding: 12px 18px; font-size: 13.5px; color: #5c4a10; margin: 16px 0 0; line-height: 1.55; }
+.flink { font-weight: 600; color: #7a5205; text-decoration: underline; text-underline-offset: 2px; }
+.flink:hover { color: var(--ink); }
