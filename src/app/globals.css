@@ -326,3 +326,5 @@ a { color: inherit; }
 .acct-line { font-size: 14.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 10px; }
 .acct-line b { color: var(--ink); }
 .acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
+.dash-input.code { flex: 0 0 130px; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .25em; text-align: center; font-weight: 700; }
+.signin-alt { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; }
