@@ -2,14 +2,14 @@
 
 Client testimonials for agencies and freelancers — one link per project, a branded wall of love per client, flat pricing with unlimited client workspaces.
 
-Live at [proofloft.com](https://proofloft.com).
+Live at [proofloft.com](https://proofloft.com). Operated by Media Yard LLC.
 
 ## Stack
 
 - Next.js 14 (App Router) + React 18, TypeScript
 - Postgres via `pg` (no ORM) — schemas in `db/`
-- Magic-link auth (HMAC-signed cookie), email via Resend
-- Billing via Lemon Squeezy (merchant of record), webhook at `/api/billing/webhook`
+- Magic-link auth (HMAC-signed cookie), email via Resend (send + inbound forwarding)
+- Billing via Stripe (Checkout + subscriptions), webhook at `/api/billing/webhook`
 - Embeddable wall-of-love widget: `public/embed.js`
 
 ## Local development
@@ -36,15 +36,17 @@ psql "$DATABASE_URL" -f db/002-workspaces.sql
 | `APP_URL` | Canonical URL, e.g. `https://proofloft.com` |
 | `RESEND_API_KEY` | Resend API key (omit in dev — links print to console) |
 | `EMAIL_FROM` | Sender address, e.g. `Proofloft <login@proofloft.com>` |
-| `LEMONSQUEEZY_API_KEY` | Lemon Squeezy API key |
-| `LEMONSQUEEZY_STORE_ID` | Store ID |
-| `LEMONSQUEEZY_WEBHOOK_SECRET` | Webhook signing secret |
-| `LEMONSQUEEZY_PRO_VARIANT_ID` | Variant ID for the Pro plan ($19/mo) |
-| `LEMONSQUEEZY_AGENCY_VARIANT_ID` | Variant ID for the Agency plan ($49/mo, unlocks client workspaces) |
+| `RESEND_WEBHOOK_SECRET` | Signing secret for the inbound-email webhook (`/api/inbound`) |
+| `FORWARD_TO` / `FORWARD_FROM` | Inbound forwarding destination / sender on the verified domain |
+| `STRIPE_SECRET_KEY` | Stripe secret key (`sk_test_…` in sandbox, `sk_live_…` in production) |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signing secret (`whsec_…`) for `/api/billing/webhook` |
+| `STRIPE_PRO_PRICE_ID` | Price ID for the Pro plan ($19/mo) |
+| `STRIPE_AGENCY_PRICE_ID` | Price ID for the Agency plan ($49/mo, unlocks client workspaces) |
+| `STRIPE_AGENCY_ANNUAL_PRICE_ID` | Optional: annual Agency price, also treated as agency tier |
 
 ## Deploy
 
-Connected to git-based hosting — push to `main` deploys production. Set the env vars above in your host's settings, then point the Lemon Squeezy webhook at `https://proofloft.com/api/billing/webhook`.
+Connected to git-based hosting — push to `main` deploys production. Set the env vars above in your host's settings, then point the Stripe webhook (events: `customer.subscription.*`, `checkout.session.completed`) at `https://proofloft.com/api/billing/webhook`.
 
 ## Structure
 
@@ -52,7 +54,8 @@ Connected to git-based hosting — push to `main` deploys production. Set the en
 src/app/          pages + API routes (App Router)
   f/[slug]/       public testimonial capture form
   dashboard/      forms, approvals (magic-link gated)
-  api/            submit, auth, billing webhook, wall JSON
+  legal/          terms, privacy, AI disclosure
+  api/            submit, auth, billing webhook, inbound email, wall JSON
   vs/             comparison pages (Senja, Testimonial.to)
 src/core/         db, auth, billing, email, events helpers
 public/embed.js   wall-of-love embed widget
