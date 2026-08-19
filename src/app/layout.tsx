@@ -67,7 +67,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   <Mark size={18} /> Proofloft
                 </span>{" "}
                 — testimonials for every client you have.
-                <br />Operated by Media Yard LLC. Payments by Lemon Squeezy (merchant of record).
+                <br />Operated by Media Yard LLC. Payments securely processed by Stripe.
                 <br />Minimal data by design: testimonials and emails, nothing else.
                 <br />© {new Date().getFullYear()} Media Yard LLC. All rights reserved.
               </div>
