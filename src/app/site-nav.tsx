@@ -1,15 +1,17 @@
 "use client";
-// Marketing nav. Hidden on /dashboard routes — the dashboard has its own
-// header (logo, plan chip, account, sign out), so a second menu up top is
-// just noise for signed-in users.
+// Marketing nav. Hidden on /dashboard (it has its own header) and on the
+// public client-facing pages (/f capture forms, /w walls) — those are shared
+// with a client's audience, who shouldn't see our menu or session buttons.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Mark from "./mark";
 import NavAuth from "./nav-auth";
 
+export const CHROME_FREE = ["/dashboard", "/f/", "/w/"];
+
 export default function SiteNav() {
   const pathname = usePathname();
-  if (pathname?.startsWith("/dashboard")) return null;
+  if (pathname && CHROME_FREE.some((p) => pathname.startsWith(p))) return null;
 
   return (
     <div className="wrap">
