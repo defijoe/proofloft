@@ -163,14 +163,16 @@ a { color: inherit; }
 .dash-wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
 
 .dash-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 38px; }
-.dash-logo { background: #fff; border-radius: 999px; padding: 11px 24px; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; box-shadow: 0 1px 3px rgba(29,29,31,.07); color: var(--ink); text-decoration: none; }
+.dash-logo { background: #fff; border-radius: 999px; padding: 11px 24px; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; box-shadow: 0 1px 3px rgba(29,29,31,.07); color: var(--ink); text-decoration: none; transition: transform .12s ease, box-shadow .12s ease; }
+.dash-logo:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(29,29,31,.13); }
 .dash-logo em { color: #e8960c; font-style: normal; }
 .dash-top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
 .dash-head { margin-bottom: 30px; }
 .dash-head h1 { font-size: clamp(36px, 5vw, 48px); font-weight: 600; letter-spacing: -0.03em; margin: 0; line-height: 1.05; }
 .dash-sub { color: #6d6a62; font-size: 15px; margin: 8px 0 0; }
-.plan-chip { display: inline-flex; align-items: center; gap: 7px; background: #fff; border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; color: #1d1d1f; box-shadow: 0 1px 3px rgba(29,29,31,.07); }
+/* Status label, deliberately NOT button-shaped: raised pills are reserved for clickable things. */
+.plan-chip { display: inline-flex; align-items: center; gap: 7px; background: transparent; padding: 9px 6px; font-size: 13.5px; font-weight: 600; color: #1d1d1f; }
 .plan-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #b9b5aa; }
 .plan-chip.pro .dot, .plan-chip.agency .dot { background: #f0b429; }
 
@@ -318,8 +320,9 @@ a { color: inherit; }
 .upsell { background: #faeec6; border-radius: 18px; padding: 16px 20px; font-size: 14px; color: #5c4a10; line-height: 1.55; }
 
 /* ---------- signed-in header links + account page ---------- */
-.dash-navlink { display: inline-flex; align-items: center; background: rgba(255,255,255,.7); border: 1px solid rgba(29,29,31,.12); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; color: var(--ink); text-decoration: none; transition: background .15s; }
-.dash-navlink:hover { background: #fff; }
+/* Same raised-white-pill affordance as .dash-logo: raised pill = clickable. */
+.dash-navlink { display: inline-flex; align-items: center; background: #fff; border: 0; border-radius: 999px; padding: 10px 20px; font-size: 13.5px; font-weight: 600; color: var(--ink); text-decoration: none; box-shadow: 0 1px 3px rgba(29,29,31,.07); transition: transform .12s ease, box-shadow .12s ease; }
+.dash-navlink:hover { transform: translateY(-1px); box-shadow: 0 5px 14px rgba(29,29,31,.13); }
 .acct-line { font-size: 14.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 10px; }
 .acct-line b { color: var(--ink); }
 .acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
