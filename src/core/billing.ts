@@ -81,6 +81,46 @@ export function verifyWebhookSignature(rawBody: string, signatureHeader: string 
   });
 }
 
+/**
+ * Hosted Stripe Customer Portal URL — cancel, change card, download invoices.
+ * The customer id isn't stored locally, so it's resolved from the user's most
+ * recent subscription via the Stripe API. Returns null when the user has never
+ * had a subscription (nothing to manage).
+ *
+ * Note: the portal must be activated once in the Stripe dashboard
+ * (Settings → Billing → Customer portal → Save) per mode (test/live).
+ */
+export async function createBillingPortalUrl(userId: number): Promise<string | null> {
+  const row = await one<{ provider_sub_id: string }>(
+    `select provider_sub_id from subscriptions
+     where user_id = $1 order by updated_at desc limit 1`,
+    [userId]
+  );
+  if (!row?.provider_sub_id) return null;
+
+  const subRes = await fetch(`${STRIPE_API}/subscriptions/${row.provider_sub_id}`, {
+    headers: { Authorization: `Bearer ${stripeKey()}` },
+  });
+  if (!subRes.ok) throw new Error(`Stripe subscription lookup failed: ${subRes.status} ${await subRes.text()}`);
+  const sub = (await subRes.json()) as { customer: string };
+
+  const params = new URLSearchParams({
+    customer: sub.customer,
+    return_url: `${process.env.APP_URL}/dashboard/account`,
+  });
+  const res = await fetch(`${STRIPE_API}/billing_portal/sessions`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${stripeKey()}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: params.toString(),
+  });
+  if (!res.ok) throw new Error(`Stripe portal session failed: ${res.status} ${await res.text()}`);
+  const json = (await res.json()) as { url: string };
+  return json.url;
+}
+
 /** Map Stripe subscription statuses onto the app's paid-state vocabulary. */
 function mapStatus(s: string): string {
   if (s === "trialing") return "on_trial";
