@@ -1,15 +1,19 @@
 /**
- * Magic-link auth. No passwords, no password resets, no credential breaches.
+ * Magic-link + one-time-code auth. No passwords, no password resets, no credential breaches.
  *
  * Flow:
- *   1. POST email -> requestLogin(email) stores a single-use token, emails a link.
- *   2. User clicks /api/auth/verify?token=... -> verifyLogin(token) returns the user.
+ *   1. POST email -> requestLogin(email) stores a single-use token AND a 6-digit code, emails both.
+ *   2a. User clicks /api/auth/verify?token=... -> verifyLogin(token) returns the user.
+ *   2b. Or types the code on the sign-in page -> verifyLoginCode(email, code) returns the user.
+ *       (The code path exists so sign-in works even when a link scanner or Safe Browsing
+ *        interstitial gets between the user and the URL — no link, nothing to block.)
  *   3. App sets a signed session cookie via createSessionCookie(); read it with readSession().
  */
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHmac, randomBytes, randomInt, timingSafeEqual } from "node:crypto";
 import { query, one } from "./db";
 import { sendEmail } from "./email";
 import { brandedEmail } from "./email-templates";
+import { track } from "./events";
 
 const TOKEN_TTL_MIN = 15;
 const SESSION_TTL_DAYS = 30;
@@ -30,25 +34,71 @@ export async function requestLogin(email: string, appName: string): Promise<void
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(normalized)) throw new Error("invalid email");
 
   const token = randomBytes(32).toString("hex");
+  const code = String(randomInt(0, 1_000_000)).padStart(6, "0"); // crypto-strong, no modulo bias
   await query(
     `insert into login_tokens (token, email, expires_at)
-     values ($1, $2, now() + interval '${TOKEN_TTL_MIN} minutes')`,
-    [token, normalized]
+     values ($1, $3, now() + interval '${TOKEN_TTL_MIN} minutes'),
+            ($2, $3, now() + interval '${TOKEN_TTL_MIN} minutes')`,
+    [token, `code:${normalized}:${code}`, normalized]
   );
 
   const url = `${process.env.APP_URL}/api/auth/verify?token=${token}`;
   await sendEmail({
     to: normalized,
-    subject: `Your sign-in link for ${appName}`,
+    subject: `${code} is your ${appName} sign-in code`,
     html: brandedEmail({
-      preheader: `Your single-use sign-in link — expires in ${TOKEN_TTL_MIN} minutes.`,
+      preheader: `Your sign-in code is ${code} — expires in ${TOKEN_TTL_MIN} minutes.`,
       heading: `Sign in to ${appName}`,
-      bodyHtml: `<p style="margin:0">Click the button below to sign in. The link is single-use and expires in <b>${TOKEN_TTL_MIN} minutes</b>.</p>`,
+      bodyHtml:
+        `<p style="margin:0 0 14px">Enter this code on the sign-in page:</p>` +
+        `<div style="display:inline-block;background:#f7f0de;border-radius:14px;padding:14px 26px;` +
+        `font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:30px;font-weight:700;` +
+        `letter-spacing:8px;color:#1d1d1f">${code}</div>` +
+        `<p style="margin:16px 0 0">Or use the one-click button below. Code and link are single-use and expire in <b>${TOKEN_TTL_MIN} minutes</b>.</p>`,
       ctaLabel: `Sign in to ${appName}`,
       ctaUrl: url,
-      footnote: `If you didn't request this email, you can safely ignore it — nobody can sign in without this link. Button not working? Paste this into your browser: ${url}`,
+      footnote: `If you didn't request this email, you can safely ignore it — nobody can sign in without this code. Button not working? Type the code at ${process.env.APP_URL}/dashboard, or paste this into your browser: ${url}`,
     }),
   });
+}
+
+/**
+ * Verify a typed 6-digit code. Single-use, expiring, and throttled:
+ * after 5 wrong guesses for an address inside the TTL window, further
+ * attempts are rejected outright (a 6-digit space must not be brute-forceable).
+ */
+export async function verifyLoginCode(email: string, code: string): Promise<SessionUser | null> {
+  const normalized = email.trim().toLowerCase();
+  const cleaned = code.replace(/\D/g, "");
+  if (!/^\d{6}$/.test(cleaned)) return null;
+
+  const fails = await one<{ n: string }>(
+    `select count(*) as n from events
+     where app = 'core' and name = 'login_code_failed'
+       and created_at > now() - interval '${TOKEN_TTL_MIN} minutes'
+       and meta->>'email' = $1`,
+    [normalized]
+  );
+  if (Number(fails?.n ?? 0) >= 5) return null;
+
+  const row = await one<{ email: string }>(
+    `update login_tokens set used_at = now()
+     where token = $1 and used_at is null and expires_at > now()
+     returning email`,
+    [`code:${normalized}:${cleaned}`]
+  );
+  if (!row) {
+    await track("core", "login_code_failed", { meta: { email: normalized } });
+    return null;
+  }
+
+  const user = await one<{ id: number; email: string }>(
+    `insert into users (email) values ($1)
+     on conflict (email) do update set email = excluded.email
+     returning id, email`,
+    [normalized]
+  );
+  return user;
 }
 
 export async function verifyLogin(token: string): Promise<SessionUser | null> {
