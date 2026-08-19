@@ -124,7 +124,7 @@ a { color: inherit; }
 .plan .price { font-family: var(--display); font-size: 38px; font-weight: 700; margin: 8px 0 2px; }
 .plan .per { color: var(--ink-3); font-size: 13.5px; margin-bottom: 16px; }
 .plan ul { margin: 0 0 22px; padding: 0; list-style: none; display: grid; gap: 9px; font-size: 14.5px; color: var(--ink-2); }
-.plan li::before { content: "\2713  "; color: var(--green); font-weight: 700; }
+.plan li::before { content: "✓  "; color: var(--green); font-weight: 700; }
 .plan .btn { margin-top: auto; text-align: center; }
 .price-note { font-size: 14px; color: var(--ink-3); margin-top: 18px; }
 
@@ -163,7 +163,7 @@ a { color: inherit; }
 .dash-wrap { max-width: 1100px; margin: 0 auto; padding: 0 28px; }
 
 .dash-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 38px; }
-.dash-logo { background: #fff; border-radius: 999px; padding: 11px 24px; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; box-shadow: 0 1px 3px rgba(29,29,31,.07); }
+.dash-logo { background: #fff; border-radius: 999px; padding: 11px 24px; font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -0.01em; box-shadow: 0 1px 3px rgba(29,29,31,.07); color: var(--ink); text-decoration: none; }
 .dash-logo em { color: #e8960c; font-style: normal; }
 .dash-top-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
@@ -316,3 +316,10 @@ a { color: inherit; }
 .notice-ok { display: inline-flex; align-items: center; gap: 8px; background: #e3f3dd; color: #2f7a44; padding: 10px 18px; border-radius: 999px; font-size: 13.5px; font-weight: 600; margin-bottom: 18px; }
 .notice-warn { display: inline-flex; align-items: center; gap: 8px; background: #faeec6; color: #7a5205; padding: 10px 18px; border-radius: 999px; font-size: 13.5px; font-weight: 600; margin-bottom: 18px; }
 .upsell { background: #faeec6; border-radius: 18px; padding: 16px 20px; font-size: 14px; color: #5c4a10; line-height: 1.55; }
+
+/* ---------- signed-in header links + account page ---------- */
+.dash-navlink { display: inline-flex; align-items: center; background: rgba(255,255,255,.7); border: 1px solid rgba(29,29,31,.12); border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; color: var(--ink); text-decoration: none; transition: background .15s; }
+.dash-navlink:hover { background: #fff; }
+.acct-line { font-size: 14.5px; color: var(--ink-2); line-height: 1.7; margin: 0 0 10px; }
+.acct-line b { color: var(--ink); }
+.acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
