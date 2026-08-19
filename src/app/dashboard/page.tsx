@@ -98,7 +98,7 @@ export default async function Dashboard({
     <div className="dash">
       <div className="dash-wrap">
         <div className="dash-top">
-          <span className="dash-logo">Proof<em>loft</em></span>
+          <Link href="/" className="dash-logo">Proof<em>loft</em></Link>
           <div className="dash-top-right">
             <span className={`plan-chip ${plan}`}><span className="dot" />{PLAN_LABEL[plan]}</span>
             {plan === "free" && (
@@ -113,6 +113,8 @@ export default async function Dashboard({
                 <button className="dash-btn sm yellow">Agency — $49/mo</button>
               </form>
             )}
+            <Link href="/dashboard/account" className="dash-navlink">Account</Link>
+            <a href="/api/auth/logout" className="dash-navlink">Sign out</a>
           </div>
         </div>
 
