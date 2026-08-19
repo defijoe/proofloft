@@ -2,6 +2,7 @@ export { db, query, one } from "./db";
 export {
   requestLogin,
   verifyLogin,
+  verifyLoginCode,
   createSessionCookie,
   readSession,
   SESSION_COOKIE,
