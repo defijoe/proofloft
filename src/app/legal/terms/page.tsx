@@ -12,7 +12,7 @@ export default function Terms() {
       <p className="kicker">Legal</p>
       <h2 style={{ fontSize: "clamp(28px, 4vw, 38px)" }}>Terms of Service</h2>
       <div className="legal">
-        <span className="updated">Last updated: August 18, 2026</span>
+        <span className="updated">Last updated: August 19, 2026</span>
 
         <h2>1. Who we are</h2>
         <p>
@@ -39,7 +39,7 @@ export default function Terms() {
 
         <h2>4. Plans, billing &amp; refunds</h2>
         <ul>
-          <li>Payments are processed by <b>Lemon Squeezy</b> as merchant of record. Your payment terms, invoices, and applicable taxes are handled by Lemon Squeezy at checkout.</li>
+          <li>Paid plans are sold by Media Yard LLC. Payments are processed securely by <b>Stripe</b>; we never see or store your card details. Applicable sales tax or VAT may be added at checkout.</li>
           <li>Subscriptions renew automatically until cancelled. You can cancel anytime; your plan stays active until the end of the paid period.</li>
           <li>If something went wrong with a charge, email us at legal@proofloft.com and we&rsquo;ll make it right — including refunds where reasonable.</li>
           <li>We may change prices with at least 30 days&rsquo; notice; changes apply from your next renewal.</li>
