@@ -134,6 +134,26 @@ export async function renameWorkspaceAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+/** Allowed wall appearance values — anything else keeps the current setting. */
+const WALL_THEMES = ["light", "dark"] as const;
+const WALL_LAYOUTS = ["cards", "list"] as const;
+
+/** Per-form wall appearance: theme + layout for the hosted wall and the embed. */
+export async function wallAppearanceAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("form_id"));
+  const theme = String(formData.get("theme") ?? "");
+  const layout = String(formData.get("layout") ?? "");
+  if (!id) return;
+  if (!(WALL_THEMES as readonly string[]).includes(theme)) return;
+  if (!(WALL_LAYOUTS as readonly string[]).includes(layout)) return;
+  await query(
+    `update forms set theme = $1, layout = $2 where id = $3 and user_id = $4`,
+    [theme, layout, id, user.id]
+  );
+  revalidatePath("/dashboard");
+}
+
 /** Delete a workspace. Its forms are kept and simply become ungrouped. */
 export async function deleteWorkspaceAction(formData: FormData) {
   const user = currentUser();
