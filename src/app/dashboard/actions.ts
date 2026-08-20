@@ -96,6 +96,56 @@ export async function createFormAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+/** Allowed import sources — anything else is stored as "other". */
+const IMPORT_SOURCES = ["email", "x", "linkedin", "instagram", "google", "g2", "other"] as const;
+
+/**
+ * Manual/social import: the owner pastes praise they received elsewhere
+ * (an email quote, a post on X/LinkedIn/Instagram, a Google or G2 review).
+ * Imports go live immediately — the owner adding it IS the approval — and the
+ * required permission checkbox stands in for the form's consent grant.
+ */
+export async function importTestimonialAction(formData: FormData) {
+  const user = currentUser();
+
+  const formId = Number(formData.get("form_id"));
+  const authorName = String(formData.get("author_name") ?? "").slice(0, 120).trim();
+  const authorTitle = String(formData.get("author_title") ?? "").slice(0, 120).trim() || null;
+  const body = String(formData.get("body") ?? "").slice(0, 2000).trim();
+  const ratingRaw = Number(formData.get("rating"));
+  const rating = ratingRaw >= 1 && ratingRaw <= 5 ? ratingRaw : null;
+  const sourceRaw = String(formData.get("source") ?? "other").toLowerCase();
+  const source = (IMPORT_SOURCES as readonly string[]).includes(sourceRaw) ? sourceRaw : "other";
+  const permission = formData.get("permission") === "on";
+
+  let sourceUrl: string | null = String(formData.get("source_url") ?? "").trim() || null;
+  if (sourceUrl) {
+    try {
+      const u = new URL(sourceUrl);
+      if (u.protocol !== "https:" && u.protocol !== "http:") sourceUrl = null;
+    } catch {
+      sourceUrl = null; // silently drop malformed URLs rather than failing the import
+    }
+  }
+
+  if (!formId || !authorName || !body || !permission) return;
+
+  // Ownership check — never trust the form id alone.
+  const form = await one<{ id: number }>(
+    `select id from forms where id = $1 and user_id = $2`,
+    [formId, user.id]
+  );
+  if (!form) return;
+
+  await query(
+    `insert into testimonials (form_id, author_name, author_title, body, rating, source, source_url, approved, consent)
+     values ($1, $2, $3, $4, $5, $6, $7, true, true)`,
+    [formId, authorName, authorTitle, body, rating, source, sourceUrl]
+  );
+  await track("testimonial", "testimonial_imported", { userId: user.id, meta: { source } });
+  revalidatePath("/dashboard");
+}
+
 export async function approveAction(formData: FormData) {
   const user = currentUser();
   const id = Number(formData.get("id"));
