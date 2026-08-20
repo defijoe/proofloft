@@ -170,6 +170,18 @@ export async function unpublishAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+/** Per-testimonial rating visibility — hide a lukewarm score without unpublishing the quote. */
+export async function toggleRatingAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("id"));
+  await query(
+    `update testimonials t set hide_rating = not t.hide_rating
+     from forms f where t.id = $1 and t.form_id = f.id and f.user_id = $2`,
+    [id, user.id]
+  );
+  revalidatePath("/dashboard");
+}
+
 /** Permanently delete a testimonial (spam, duplicates, takedown requests). */
 export async function deleteTestimonialAction(formData: FormData) {
   const user = currentUser();
