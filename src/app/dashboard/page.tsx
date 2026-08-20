@@ -13,9 +13,11 @@ import {
   createFormAction,
   createWorkspaceAction,
   checkoutAction,
+  importTestimonialAction,
   loginAction,
   codeLoginAction,
 } from "./actions";
+import { SOURCE_LABELS } from "../sources";
 
 export const dynamic = "force-dynamic";
 
@@ -291,6 +293,58 @@ export default async function Dashboard({
             </form>
           </div>
         </div>
+
+        {forms.length > 0 && (
+          <div className="panel">
+            <div className="panel-head">
+              <h2>Add a testimonial</h2>
+              <span className="hint">Paste praise from an email or social post — it publishes straight to the wall</span>
+            </div>
+            <div className="panel-body">
+              <form action={importTestimonialAction} className="import-form">
+                <div className="dash-form">
+                  <select name="form_id" required className="dash-input" defaultValue="">
+                    <option value="" disabled>Which form / wall?</option>
+                    {forms.map((f) => (
+                      <option key={f.id} value={f.id}>{f.name}{f.ws_name ? ` — ${f.ws_name}` : ""}</option>
+                    ))}
+                  </select>
+                  <select name="source" className="dash-input" defaultValue="email">
+                    {Object.entries(SOURCE_LABELS).map(([k, v]) => (
+                      <option key={k} value={k}>{k === "other" ? "Other" : v}</option>
+                    ))}
+                  </select>
+                  <select name="rating" className="dash-input" defaultValue="">
+                    <option value="">No rating</option>
+                    {[5, 4, 3, 2, 1].map((n) => (
+                      <option key={n} value={n}>{"★".repeat(n)}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="dash-form">
+                  <input name="author_name" required placeholder="Author name" className="dash-input" />
+                  <input name="author_title" placeholder="Title, e.g. COO, Acme (optional)" className="dash-input" />
+                  <input name="source_url" type="url" placeholder="Link to the original post (optional)" className="dash-input" />
+                </div>
+                <textarea
+                  name="body"
+                  required
+                  rows={3}
+                  placeholder="Paste the testimonial text…"
+                  className="dash-area"
+                  style={{ width: "100%" }}
+                />
+                <label className="consent-box">
+                  <input type="checkbox" name="permission" required style={{ marginRight: 8 }} />
+                  I have the author&rsquo;s permission to display this testimonial publicly.
+                </label>
+                <div>
+                  <button className="dash-btn yellow">Add to wall</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <div className="panel dark">
           <div className="panel-head">
