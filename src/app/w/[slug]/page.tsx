@@ -3,6 +3,7 @@
 // zero-setup version — share the link, done.
 import { notFound } from "next/navigation";
 import { query, one, isPro } from "@factory/core";
+import { sourceLabel } from "../../sources";
 
 export const dynamic = "force-dynamic";
 
@@ -23,8 +24,9 @@ export default async function Wall({ params }: { params: { slug: string } }) {
 
   const items = await query<{
     author_name: string; author_title: string | null; body: string; rating: number | null;
+    source: string | null; source_url: string | null;
   }>(
-    `select author_name, author_title, body, rating
+    `select author_name, author_title, body, rating, source, source_url
      from testimonials
      where form_id = $1 and approved = true and consent = true
      order by created_at desc limit 50`,
@@ -58,6 +60,18 @@ export default async function Wall({ params }: { params: { slug: string } }) {
                 <figcaption>
                   <b>{t.author_name}</b>
                   {t.author_title ? ` · ${t.author_title}` : ""}
+                  {t.source && (
+                    <>
+                      {" · "}
+                      {t.source_url ? (
+                        <a className="tsource" href={t.source_url} target="_blank" rel="noopener nofollow">
+                          via {sourceLabel(t.source)} ↗
+                        </a>
+                      ) : (
+                        <span className="tsource">via {sourceLabel(t.source)}</span>
+                      )}
+                    </>
+                  )}
                 </figcaption>
               </figure>
             ))}
