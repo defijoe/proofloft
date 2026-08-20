@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 export default async function CaptureForm({ params }: { params: { slug: string } }) {
   const form = await one<{ id: number; name: string; headline: string }>(
-    `select id, name, headline from forms where slug = $1`,
+    `select id, name, headline from forms where slug = $1 and not archived`,
     [params.slug]
   );
 
