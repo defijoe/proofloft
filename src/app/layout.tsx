@@ -4,6 +4,7 @@ import SiteFooter from "./site-footer";
 import "./globals.css";
 
 export const metadata = {
+  metadataBase: new URL("https://proofloft.com"),
   title: "Proofloft — client testimonials for agencies, without per-client pricing",
   description:
     "Send a link, get a testimonial, embed a wall of love per client. Unlimited client workspaces on one flat plan.",
