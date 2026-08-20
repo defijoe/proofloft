@@ -212,7 +212,7 @@ export default function Landing() {
           <div className="plan">
             <span className="name">Pro</span>
             <div className="price">$19</div>
-            <div className="per">per month · 2 months free annually</div>
+            <div className="per">per month · or $190/yr (2 months free)</div>
             <ul>
               <li>Unlimited forms &amp; testimonials</li>
               <li>Badge removed</li>
@@ -224,7 +224,7 @@ export default function Landing() {
             <span className="badge">FOR AGENCIES</span>
             <span className="name">Agency</span>
             <div className="price">$49</div>
-            <div className="per">per month · unlimited clients</div>
+            <div className="per">per month · or $490/yr (2 months free)</div>
             <ul>
               <li>Everything in Pro</li>
               <li><b>Unlimited client workspaces</b></li>
