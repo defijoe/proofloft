@@ -28,6 +28,8 @@ export default function SiteFooter() {
           <div style={{ textAlign: "right" }}>
             <Link href="/about">About us</Link>
             <br />
+            <Link href="/blog">Blog</Link>
+            <br />
             <Link href="/docs/embed">How to embed</Link>
             <br />
             <Link href="/vs/senja">Proofloft vs Senja</Link>
