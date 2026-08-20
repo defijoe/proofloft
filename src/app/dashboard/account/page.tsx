@@ -25,6 +25,9 @@ export default async function Account({
   if (!user) redirect("/dashboard");
 
   const plan = await getPlan(user!.id);
+  // Annual buttons only render once the annual price IDs exist in the environment.
+  const annualPro = !!process.env.STRIPE_PRO_ANNUAL_PRICE_ID;
+  const annualAgency = !!process.env.STRIPE_AGENCY_ANNUAL_PRICE_ID;
 
   return (
     <div className="dash">
@@ -58,16 +61,33 @@ export default async function Account({
           <div className="panel-body">
             <p className="acct-line"><b>{PLAN_LABEL[plan]}</b> — {PLAN_DESC[plan]}</p>
             {plan === "free" ? (
-              <div className="dash-form" style={{ marginTop: 14 }}>
-                <form action={checkoutAction} style={{ display: "inline" }}>
-                  <input type="hidden" name="plan" value="pro" />
-                  <button className="dash-btn sm">Upgrade to Pro — $19/mo</button>
-                </form>
-                <form action={checkoutAction} style={{ display: "inline" }}>
-                  <input type="hidden" name="plan" value="agency" />
-                  <button className="dash-btn sm yellow">Agency — $49/mo</button>
-                </form>
-              </div>
+              <>
+                <div className="dash-form" style={{ marginTop: 14 }}>
+                  <form action={checkoutAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="plan" value="pro" />
+                    <button className="dash-btn sm">Pro — $19/mo</button>
+                  </form>
+                  {annualPro && (
+                    <form action={checkoutAction} style={{ display: "inline" }}>
+                      <input type="hidden" name="plan" value="pro_annual" />
+                      <button className="dash-btn sm">Pro annual — $190/yr</button>
+                    </form>
+                  )}
+                  <form action={checkoutAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="plan" value="agency" />
+                    <button className="dash-btn sm yellow">Agency — $49/mo</button>
+                  </form>
+                  {annualAgency && (
+                    <form action={checkoutAction} style={{ display: "inline" }}>
+                      <input type="hidden" name="plan" value="agency_annual" />
+                      <button className="dash-btn sm yellow">Agency annual — $490/yr</button>
+                    </form>
+                  )}
+                </div>
+                {(annualPro || annualAgency) && (
+                  <p className="acct-note">Annual billing = 2 months free.</p>
+                )}
+              </>
             ) : (
               <form action={billingPortalAction} style={{ marginTop: 14 }}>
                 <button className="dash-btn sm">Manage billing</button>
