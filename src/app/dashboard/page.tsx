@@ -10,13 +10,17 @@ import {
 } from "@factory/core";
 import {
   approveAction,
+  archiveFormAction,
   createFormAction,
   createWorkspaceAction,
   checkoutAction,
   deleteTestimonialAction,
+  deleteWorkspaceAction,
   importTestimonialAction,
   loginAction,
   codeLoginAction,
+  renameFormAction,
+  renameWorkspaceAction,
   toggleRatingAction,
   unpublishAction,
 } from "./actions";
@@ -109,7 +113,7 @@ export default async function Dashboard({
      from forms f
      left join workspaces w on w.id = f.workspace_id
      left join testimonials t on t.form_id = f.id
-     where f.user_id = $1 ${activeWs ? "and f.workspace_id = $2" : ""}
+     where f.user_id = $1 and not f.archived ${activeWs ? "and f.workspace_id = $2" : ""}
      group by f.id, w.name order by f.id desc`,
     activeWs ? [user.id, activeWs.id] : [user.id]
   );
@@ -119,21 +123,21 @@ export default async function Dashboard({
             count(t.id) filter (where not t.approved) as pending,
             count(distinct f.id) as forms
      from forms f left join testimonials t on t.form_id = f.id
-     where f.user_id = $1`,
+     where f.user_id = $1 and not f.archived`,
     [user.id]
   );
 
   const pendingItems = await query<{ id: number; author_name: string; author_title: string | null; rating: number | null; body: string; form_name: string }>(
     `select t.id, t.author_name, t.author_title, t.rating, t.body, f.name as form_name
      from testimonials t join forms f on f.id = t.form_id
-     where f.user_id = $1 and not t.approved order by t.created_at desc limit 20`,
+     where f.user_id = $1 and not f.archived and not t.approved order by t.created_at desc limit 20`,
     [user.id]
   );
 
   const publishedItems = await query<{ id: number; author_name: string; author_title: string | null; rating: number | null; hide_rating: boolean; body: string; form_name: string; source: string | null }>(
     `select t.id, t.author_name, t.author_title, t.rating, t.hide_rating, t.body, f.name as form_name, t.source
      from testimonials t join forms f on f.id = t.form_id
-     where f.user_id = $1 and t.approved order by t.created_at desc limit 30`,
+     where f.user_id = $1 and not f.archived and t.approved order by t.created_at desc limit 30`,
     [user.id]
   );
 
@@ -242,6 +246,29 @@ export default async function Dashboard({
                   <input name="name" required placeholder="New client workspace, e.g. Acme Corp" className="dash-input" />
                   <button className="dash-btn">Add workspace</button>
                 </form>
+                {workspaces.length > 0 && (
+                  <details className="manage">
+                    <summary>Rename or delete a workspace</summary>
+                    {workspaces.map((w) => (
+                      <div className="manage-row" key={w.id}>
+                        <form action={renameWorkspaceAction} className="dash-form" style={{ flex: 1 }}>
+                          <input type="hidden" name="workspace_id" value={w.id} />
+                          <input name="name" defaultValue={w.name} required className="dash-input" />
+                          <button className="dash-btn sm">Save name</button>
+                        </form>
+                        <form action={deleteWorkspaceAction}>
+                          <input type="hidden" name="workspace_id" value={w.id} />
+                          <ConfirmButton
+                            className="tdelete"
+                            message={`Delete workspace "${w.name}"? Its forms and testimonials are kept — they just become ungrouped.`}
+                          >
+                            Delete
+                          </ConfirmButton>
+                        </form>
+                      </div>
+                    ))}
+                  </details>
+                )}
               </>
             ) : (
               <div className="upsell">
@@ -275,6 +302,25 @@ export default async function Dashboard({
                   <div className="fmeta">
                     Embed the wall: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
                   </div>
+                  <details className="manage">
+                    <summary>Rename or delete</summary>
+                    <div className="manage-row">
+                      <form action={renameFormAction} className="dash-form" style={{ flex: 1 }}>
+                        <input type="hidden" name="form_id" value={f.id} />
+                        <input name="name" defaultValue={f.name} required className="dash-input" />
+                        <button className="dash-btn sm">Save name</button>
+                      </form>
+                      <form action={archiveFormAction}>
+                        <input type="hidden" name="form_id" value={f.id} />
+                        <ConfirmButton
+                          className="tdelete"
+                          message={`Delete "${f.name}"? Its form and wall pages go offline immediately. Testimonials and consent records are archived, not destroyed.`}
+                        >
+                          Delete form
+                        </ConfirmButton>
+                      </form>
+                    </div>
+                  </details>
                 </div>
                 <div className="fright">
                   <div className="fnum">{f.total}</div>
