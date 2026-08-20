@@ -7,9 +7,11 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 - [x] **Google Safe Browsing review** — cleared by Google (Aug 20). Sign-in reverted to link-first, 6-digit code kept as backup.
 - [x] **Sending domain** — proofloft.com Verified in Resend (SPF/DKIM/MX green); sender `Proofloft <hello@proofloft.com>`.
 - [x] **Inbound forwarding** — working (Aug 20). Fix was two envs: `FORWARD_TO`/`FORWARD_FROM` set in Netlify, plus a **Full access** Resend API key (the sending-only key 401'd on the forward call). legal@/hello@ now reach Gmail.
-- [x] **Stripe Customer Portal activation** — done in test mode; repeat in live mode at switch-over.
-- [ ] **Stripe live mode** (Claude) — activate account, recreate Pro/Agency products + monthly prices in live mode, live webhook endpoint at /api/billing/webhook, swap Netlify env to `sk_live_…` + live price IDs + live `whsec_…`. Consider enabling Stripe Tax.
-- [ ] **Final end-to-end self-test on production** — sign in → create workspace + form → submit testimonial → approve → check wall + embed → upgrade with real checkout (then refund/cancel).
+- [x] **Stripe Customer Portal activation** — done in both test and live mode.
+- [x] **Stripe live mode** — live products/prices created (Pro price_1U6YSp4I71kjhJGUYZMXfAyo $19/mo, Agency price_1U6YSv4I71kjhJGU1L4GeWUb $49/mo, annuals price_1U6YSs4I71kjhJGUGiMLs9qm / price_1U6YTB4I71kjhJGUqUbHo2zS), live webhook we_1U6YTN4I71kjhJGUbM1jXQEq at /api/billing/webhook, Netlify env swapped. Stripe Tax still optional (backlog).
+- [x] **Final end-to-end self-test on production** — real $49 Agency checkout succeeded on live (Aug 20), webhook processed, subscription canceled after. Refund done by Jon in the Stripe dashboard.
+
+**Launch checklist complete — Proofloft is live. 🎉**
 
 ## Week two
 
@@ -22,7 +24,8 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 
 ## Later / backlog
 
-- Annual plans surfaced in the UI (prices already exist in Stripe: Pro $190/yr, Agency $490/yr).
+- Annual plans surfaced in the UI (prices already exist live: Pro $190/yr, Agency $490/yr).
+- Consider enabling Stripe Tax before meaningful revenue.
 - Wall layout options (light/dark theme, card vs. list) for embeds on client sites.
 - CSV/JSON export button in Account (today export is by-email per the privacy policy).
 - Fuller settings if demand appears: notification preferences, API access.
