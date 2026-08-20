@@ -32,11 +32,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function Wall({ params }: { params: { slug: string } }) {
-  const form = await one<{ id: number; name: string; user_id: number }>(
-    `select id, name, user_id from forms where slug = $1 and not archived`,
+  const form = await one<{ id: number; name: string; user_id: number; theme: string; layout: string }>(
+    `select id, name, user_id, theme, layout from forms where slug = $1 and not archived`,
     [params.slug]
   );
   if (!form) notFound();
+  const dark = form!.theme === "dark";
+  const list = form!.layout === "list";
 
   const items = await query<{
     author_name: string; author_title: string | null; body: string; rating: number | null;
@@ -55,7 +57,7 @@ export default async function Wall({ params }: { params: { slug: string } }) {
   const paid = await isPro(form!.user_id);
 
   return (
-    <div className="dash">
+    <div className={dark ? "dash wall-dark" : "dash"}>
       <section className="section wrap" style={{ paddingTop: 40 }}>
         <div style={{ textAlign: "center" }}>
           <p className="kicker">Wall of love</p>
@@ -70,7 +72,7 @@ export default async function Wall({ params }: { params: { slug: string } }) {
         </div>
 
         {items.length > 0 && (
-          <div className="wall">
+          <div className={list ? "wall list" : "wall"}>
             {items.map((t, i) => (
               <figure className="tcard" key={i}>
                 {t.rating ? <div className="stars">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</div> : null}
