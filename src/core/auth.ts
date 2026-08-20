@@ -45,19 +45,20 @@ export async function requestLogin(email: string, appName: string): Promise<void
   const url = `${process.env.APP_URL}/api/auth/verify?token=${token}`;
   await sendEmail({
     to: normalized,
-    subject: `${code} is your ${appName} sign-in code`,
+    subject: `Your sign-in link for ${appName}`,
     html: brandedEmail({
-      preheader: `Your sign-in code is ${code} — expires in ${TOKEN_TTL_MIN} minutes.`,
+      preheader: `Click the button to sign in — the link expires in ${TOKEN_TTL_MIN} minutes.`,
       heading: `Sign in to ${appName}`,
       bodyHtml:
-        `<p style="margin:0 0 14px">Enter this code on the sign-in page:</p>` +
-        `<div style="display:inline-block;background:#f7f0de;border-radius:14px;padding:14px 26px;` +
-        `font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:30px;font-weight:700;` +
-        `letter-spacing:8px;color:#1d1d1f">${code}</div>` +
-        `<p style="margin:16px 0 0">Or use the one-click button below. Code and link are single-use and expire in <b>${TOKEN_TTL_MIN} minutes</b>.</p>`,
+        `<p style="margin:0 0 6px">Click the button below to sign in. The link is single-use and expires in <b>${TOKEN_TTL_MIN} minutes</b>.</p>`,
       ctaLabel: `Sign in to ${appName}`,
       ctaUrl: url,
-      footnote: `If you didn't request this email, you can safely ignore it — nobody can sign in without this code. Button not working? Type the code at ${process.env.APP_URL}/dashboard, or paste this into your browser: ${url}`,
+      afterCtaHtml:
+        `<p style="margin:20px 0 8px;font-size:13px;color:#6e6e73">Button not working? Enter this code on the sign-in page instead:</p>` +
+        `<div style="display:inline-block;background:#f7f0de;border-radius:10px;padding:8px 16px;` +
+        `font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:20px;font-weight:700;` +
+        `letter-spacing:6px;color:#1d1d1f">${code}</div>`,
+      footnote: `If you didn't request this email, you can safely ignore it — nobody can sign in without this link. You can also paste this into your browser: ${url}`,
     }),
   });
 }
