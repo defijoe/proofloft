@@ -15,7 +15,7 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 
 ## Week two
 
-1. **Social & manual testimonial import** — "Add testimonial" flow in the dashboard: paste text + author + optional source URL (X/LinkedIn/Instagram/Google/G2 or an email quote). Wall card shows a platform icon and "View original post ↗" link. No live embeds (third-party scripts break the wall's design, privacy promise, and client-site embeds). Needs migration 003: `testimonials.source`, `testimonials.source_url`.
+1. ~~**Social & manual testimonial import**~~ — DONE (Aug 20). "Add a testimonial" panel in the dashboard: paste text + author + source (Email/X/LinkedIn/Instagram/Google/G2/Other) + optional link to the original. Publishes immediately with a required permission checkbox; walls, the JSON feed, and embed.js show "via <platform> ↗". Migration 003 applied to production.
 2. **Testimonial management** — unpublish and delete buttons on approved testimonials (today approval is one-way; there's no way to take something off a wall without SQL).
 3. **Hide-rating option** — per-form or per-testimonial toggle so a lukewarm 3-star rating doesn't have to appear next to a glowing quote.
 4. **Form & workspace management** — rename and delete (with confirmation; deleting a form archives its testimonials rather than destroying consent records).
