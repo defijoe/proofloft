@@ -20,6 +20,17 @@
     return s;
   }
 
+  var SOURCES = { email: "Email", x: "X", linkedin: "LinkedIn", instagram: "Instagram", google: "Google", g2: "G2", other: "the web" };
+
+  function sourceHtml(t) {
+    if (!t.source) return "";
+    var label = "via " + esc(SOURCES[t.source] || SOURCES.other);
+    if (t.source_url && /^https?:\/\//.test(t.source_url)) {
+      return ' · <a href="' + esc(t.source_url) + '" target="_blank" rel="noopener nofollow" style="color:#999;font-size:12px">' + label + " ↗</a>";
+    }
+    return ' · <span style="color:#999;font-size:12px">' + label + "</span>";
+  }
+
   function render(el, data) {
     var cards = data.items
       .map(function (t) {
@@ -29,6 +40,7 @@
           '<blockquote style="margin:10px 0;font-size:15px;line-height:1.55;color:#222">' + esc(t.body) + "</blockquote>" +
           '<figcaption style="font-size:13px;color:#666"><b style="color:#111">' + esc(t.author_name) + "</b>" +
           (t.author_title ? " · " + esc(t.author_title) : "") +
+          sourceHtml(t) +
           "</figcaption></figure>"
         );
       })
