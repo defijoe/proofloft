@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   }
 
   const owner = await one<{ id: number; email: string; name: string }>(
-    `select u.id, u.email, f.name from forms f join users u on u.id = f.user_id where f.id = $1`,
+    `select u.id, u.email, f.name from forms f join users u on u.id = f.user_id where f.id = $1 and not f.archived`,
     [formId]
   );
   if (!owner) return NextResponse.json({ error: "form not found" }, { status: 404 });
