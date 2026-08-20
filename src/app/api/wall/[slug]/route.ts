@@ -8,7 +8,9 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
   if (!form) return NextResponse.json({ error: "not found" }, { status: 404 });
 
   const items = await query(
-    `select author_name, author_title, body, rating, source, source_url, created_at
+    `select author_name, author_title, body,
+            case when hide_rating then null else rating end as rating,
+            source, source_url, created_at
      from testimonials
      where form_id = $1 and approved = true and consent = true
      order by created_at desc limit 50`,
