@@ -349,6 +349,9 @@ select.dash-input { appearance: none; -webkit-appearance: none; background-image
 .trow-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
 .fright.trow-actions { margin-top: 0; justify-content: flex-end; }
 .tdelete { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; color: #9c3325; text-decoration: underline; text-underline-offset: 2px; }
+/* Neutral quiet toggle (hide/show rating) — same shape as .tdelete, calmer color. */
+.ttoggle { background: none; border: 0; padding: 0; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; color: var(--ink-3); text-decoration: underline; text-underline-offset: 2px; }
+.ttoggle:hover { color: var(--ink); }
 .tdelete:hover { color: #7a2419; }
 .panel.dark .tdelete { color: #e8998d; }
 .panel.dark .tdelete:hover { color: #f3b9b0; }
