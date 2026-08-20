@@ -1,6 +1,6 @@
 // Public capture form: what the customer's client sees at /f/<slug>.
 import { notFound } from "next/navigation";
-import { one } from "@factory/core";
+import { one, track } from "@factory/core";
 
 export const dynamic = "force-dynamic";
 
@@ -11,6 +11,9 @@ export default async function CaptureForm({ params }: { params: { slug: string }
   );
 
   if (!form) notFound(); // renders the branded 404
+
+  // Cookieless view count for the owner's funnel — no visitor data, just a tally.
+  await track("testimonial", "form_view", { meta: { formId: form!.id } });
 
   return (
     <main className="capture">
