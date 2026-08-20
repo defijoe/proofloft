@@ -26,7 +26,9 @@ export default async function Wall({ params }: { params: { slug: string } }) {
     author_name: string; author_title: string | null; body: string; rating: number | null;
     source: string | null; source_url: string | null;
   }>(
-    `select author_name, author_title, body, rating, source, source_url
+    `select author_name, author_title, body,
+            case when hide_rating then null else rating end as rating,
+            source, source_url
      from testimonials
      where form_id = $1 and approved = true and consent = true
      order by created_at desc limit 50`,
