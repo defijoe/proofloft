@@ -92,6 +92,29 @@ a { color: inherit; }
 .tcard figcaption b { color: var(--ink); font-weight: 600; }
 .wall-caption { text-align: center; font-size: 13px; color: var(--ink-3); margin-top: 16px; }
 
+/* ---------- wall appearance (per-form theme + layout) ---------- */
+.wall.list { columns: 1; max-width: 620px; margin-left: auto; margin-right: auto; }
+.dash.wall-dark {
+  /* Two classes: must outrank the later `.dash` rule's background + color.
+     Re-scoped ink vars: inline `var(--ink-*)` styles resolve locally, so they retheme too. */
+  --ink: #f2efe8;
+  --ink-2: #c6c0b4;
+  --ink-3: #a39d90;
+  color: #ece9e2;
+  background:
+    radial-gradient(1000px 560px at 88% -5%, rgba(232,150,12,.13) 0%, rgba(232,150,12,0) 62%),
+    radial-gradient(820px 560px at 4% 104%, rgba(232,150,12,.09) 0%, rgba(232,150,12,0) 58%),
+    linear-gradient(155deg, #191713 0%, #221e16 100%);
+}
+.wall-dark .kicker { color: #e8b34a; }
+.wall-dark .tcard {
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+.wall-dark .tcard blockquote { color: #e9e5db; }
+.wall-dark a.tsource:hover { color: #fff; }
+
 /* ---------- sections ---------- */
 .section { padding: 70px 0 0; }
 .section h2 { font-size: clamp(26px, 3.6vw, 34px); margin: 0 0 14px; }
@@ -361,6 +384,7 @@ select.dash-input { appearance: none; -webkit-appearance: none; background-image
 .manage summary::-webkit-details-marker { display: none; }
 .manage summary:hover { color: var(--ink); }
 .manage-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+.mlabel { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 600; color: var(--ink-3); }
 /* Source attribution on wall cards: quiet link, platform name underlined. */
 .tsource { font-size: 12px; color: var(--ink-3); }
 a.tsource { text-decoration: underline; text-underline-offset: 2px; }
