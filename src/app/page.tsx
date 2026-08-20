@@ -1,7 +1,8 @@
 // Landing page — agency positioning, warm-gradient style guide.
-// Structure follows the proven SaaS conversion framework: problem-acknowledgment hero →
-// product demo → metrics → problem → how it works → output → agency section → pricing →
-// competitive positioning → FAQ → risk-reversal CTA. Copy rationale: launch/landing-copy.md
+// Hierarchy (one idea per band): compact hero → product demo → problem → how it works →
+// output (wall) → agency benefits + pricing math → pricing → competitive → FAQ → CTA.
+// Affordance rule: ember (--cta) = clickable button; yellow = decoration/status only.
+// Copy rationale: launch/landing-copy.md
 import Link from "next/link";
 
 const SAMPLE_WALL = [
@@ -35,29 +36,15 @@ export default function Landing() {
           <a href="#how" className="btn btn-ghost">See how it works ↓</a>
         </div>
         <p className="hero-note">{TRUST_LINE}</p>
+      </header>
 
-        {/* Honest metrics band — pricing math, not invented adoption numbers */}
-        <div className="lp-metrics">
-          <div className="pstat">
-            <div className="lbl">Setup to first link</div>
-            <div className="pill black">2 min</div>
-          </div>
-          <div className="pstat">
-            <div className="lbl">Price at 10 clients</div>
-            <div className="pill yellow">$49 flat</div>
-          </div>
-          <div className="pstat">
-            <div className="lbl">Senja at 10 clients</div>
-            <div className="pill hatch">~$109/mo</div>
-          </div>
-          <div className="pstat">
-            <div className="lbl">Client workspaces</div>
-            <div className="pill line">Unlimited</div>
-          </div>
+      {/* ---- Product demonstration — the actual dashboard, in miniature ---- */}
+      <section className="section wrap" style={{ paddingTop: 34 }}>
+        <div className="wrap-narrow" style={{ padding: 0, textAlign: "center" }}>
+          <p className="kicker">The product</p>
+          <h2>One dashboard. One workspace per client.</h2>
         </div>
-
-        {/* Product demonstration — the actual dashboard, in miniature */}
-        <div className="mockup" aria-label="Proofloft dashboard preview">
+        <div className="mockup" aria-label="Proofloft dashboard preview" style={{ marginTop: 30 }}>
           <div className="panel">
             <div className="mock-head">
               <span className="mock-title">Proof<span style={{ color: "#e8960c" }}>loft</span> — your dashboard</span>
@@ -98,9 +85,9 @@ export default function Landing() {
               </div>
             </div>
           </div>
-          <p className="mock-note">↑ One workspace per client. Approve a testimonial and it&rsquo;s live on that client&rsquo;s wall — nothing else to do.</p>
+          <p className="mock-note">↑ Approve a testimonial and it&rsquo;s live on that client&rsquo;s wall — nothing else to do.</p>
         </div>
-      </header>
+      </section>
 
       {/* ---- Problem ---- */}
       <section className="section wrap-narrow">
