@@ -15,6 +15,8 @@ export function brandedEmail(opts: {
   bodyHtml: string;
   ctaLabel?: string;
   ctaUrl?: string;
+  /** Inner HTML rendered inside the card, below the CTA button (e.g. a backup code). */
+  afterCtaHtml?: string;
   /** Small gray line under the card, e.g. "If you didn't request this…" */
   footnote?: string;
 }): string {
@@ -43,6 +45,7 @@ export function brandedEmail(opts: {
           <h1 style="margin:0 0 14px;font-size:23px;font-weight:700;color:#1d1d1f;letter-spacing:-0.4px">${opts.heading}</h1>
           <div style="font-size:15px;line-height:1.65;color:#57503f">${opts.bodyHtml}</div>
           ${cta}
+          ${opts.afterCtaHtml ? `<div style="font-size:15px;line-height:1.65;color:#57503f">${opts.afterCtaHtml}</div>` : ""}
         </td></tr>
         ${opts.footnote ? `<tr><td style="padding:16px 10px 0;font-family:${FONT};font-size:12.5px;line-height:1.6;color:#6d685b">${opts.footnote}</td></tr>` : ""}
         <tr><td style="padding:26px 10px 0;font-family:${FONT};font-size:12px;line-height:1.7;color:#6d685b">
