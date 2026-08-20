@@ -101,6 +101,28 @@ export default async function Account({
 
         <div className="panel">
           <div className="panel-head">
+            <h2>Your data</h2>
+            <span className="hint">Everything, instantly — no email required</span>
+          </div>
+          <div className="panel-body">
+            <p className="acct-line">
+              Download every testimonial across all your forms — including consent records,
+              ratings, sources, and archived forms.
+            </p>
+            <div className="dash-form" style={{ marginTop: 12 }}>
+              <a href="/api/export?format=csv" className="dash-btn sm" style={{ textDecoration: "none" }}>
+                Download CSV
+              </a>
+              <a href="/api/export?format=json" className="dash-btn sm" style={{ textDecoration: "none" }}>
+                Download JSON
+              </a>
+            </div>
+            <p className="acct-note">CSV opens in Excel or Google Sheets; JSON is handy for backups and migrations.</p>
+          </div>
+        </div>
+
+        <div className="panel">
+          <div className="panel-head">
             <h2>Sign-in &amp; data</h2>
             <span className="hint">Minimal by design</span>
           </div>
@@ -109,8 +131,8 @@ export default async function Account({
               You sign in with magic links sent to <b>{user!.email}</b> — there&rsquo;s no password to manage.
             </p>
             <p className="acct-line">
-              Want an export of your testimonials and consent records, or to close your account?
-              Email <b>legal@proofloft.com</b> and we&rsquo;ll take care of it within 30 days, as promised in our{" "}
+              Want to close your account? Email <b>legal@proofloft.com</b> and we&rsquo;ll take care
+              of it within 30 days, as promised in our{" "}
               <Link href="/legal/privacy" style={{ textDecoration: "underline" }}>Privacy Policy</Link>.
             </p>
           </div>
