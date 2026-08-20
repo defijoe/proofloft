@@ -334,6 +334,11 @@ export default async function Dashboard({
                   className="dash-area"
                   style={{ width: "100%" }}
                 />
+                <p className="guide-tip" style={{ margin: 0 }}>
+                  Tip: to link the original post, use the post&rsquo;s <b>⋯ menu → &ldquo;Copy link&rdquo;</b> on
+                  X/LinkedIn/Instagram (or the <b>Share</b> button on a Google review) and paste the URL above —
+                  the wall card will show &ldquo;via LinkedIn ↗&rdquo; pointing back to it.
+                </p>
                 <label className="consent-box">
                   <input type="checkbox" name="permission" required style={{ marginRight: 8 }} />
                   I have the author&rsquo;s permission to display this testimonial publicly.
