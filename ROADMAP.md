@@ -31,3 +31,16 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 - Fuller settings if demand appears: notification preferences, API access.
 - ~~Simple owner analytics~~ — DONE (Aug 20). "Form performance" panel on the dashboard: views → submissions → published per form with conversion rates. Views come from a new cookieless `form_view` event on /f pages (counting starts Aug 20, 2026); submissions/published come from the testimonials table, organic only (imports excluded). No migration needed.
 - Testimonial request reminders (polite nudge email to people who haven't submitted).
+
+## Factory — next products (strategy set Aug 20, 2026)
+
+Principle: every new product reuses the same buyer (agencies/SMBs), the same engine (collect → approve → display, consent records, magic-link auth, zero-SDK Stripe, Resend email), and the same distribution. Ranked:
+
+1. **Proofloft distribution first.** No new product until Proofloft has its first real agencies — everything below doubles in value once there's a customer base to cross-sell.
+2. **ReviewLoft** — review funnel for local businesses. Collect a rating; 4–5★ routes to "post it on Google," 1–3★ routes to a private feedback inbox. Sold to local SMBs ($50–100/mo/location) and white-labeled through agencies (same buyer as Proofloft). **Domain secured: getreviewloft.com** (bought on Netlify, Aug 20 — reviewloft.com is parked/taken; brand stays "ReviewLoft").
+3. **Client report sender for agencies** — branded monthly "what we did + results" report pages with view receipts. Same buyer as Proofloft; best cross-sell.
+4. **Case-study generator** — AI-assisted testimonial → case study page. Not a separate product; a Proofloft upsell tier.
+
+Parked: "feedback sender" idea, refined to *documented employee feedback for small employers* (structured feedback + acknowledgment + timestamped trail — the consent-record engine, inverted). Real payer, but validate with ~10 small-business conversations before building. The horizontal version (teachers→students, anyone→anyone) is a no: no marketable audience, no budget-holding payer.
+
+Skip list (evaluated, declined): status pages, waitlists, form builders — commoditized, race-to-free markets.
