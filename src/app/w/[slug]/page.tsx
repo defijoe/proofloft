@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function Wall({ params }: { params: { slug: string } }) {
   const form = await one<{ id: number; name: string; user_id: number }>(
-    `select id, name, user_id from forms where slug = $1`,
+    `select id, name, user_id from forms where slug = $1 and not archived`,
     [params.slug]
   );
   if (!form) notFound();
