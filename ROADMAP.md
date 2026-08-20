@@ -24,7 +24,7 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 
 ## Later / backlog
 
-- Annual plans surfaced in the UI (prices already exist live: Pro $190/yr, Agency $490/yr).
+- ~~Annual plans surfaced in the UI~~ — DONE (Aug 20). Homepage pricing shows "or $190/yr / $490/yr (2 months free)"; Account page gets annual upgrade buttons and checkout accepts pro_annual/agency_annual. Buttons are env-gated: they appear once `STRIPE_PRO_ANNUAL_PRICE_ID` and `STRIPE_AGENCY_ANNUAL_PRICE_ID` are set in Netlify (live price IDs already exist).
 - Consider enabling Stripe Tax before meaningful revenue.
 - Wall layout options (light/dark theme, card vs. list) for embeds on client sites.
 - CSV/JSON export button in Account (today export is by-email per the privacy policy).
