@@ -17,7 +17,7 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 
 1. ~~**Social & manual testimonial import**~~ — DONE (Aug 20). "Add a testimonial" panel in the dashboard: paste text + author + source (Email/X/LinkedIn/Instagram/Google/G2/Other) + optional link to the original. Publishes immediately with a required permission checkbox; walls, the JSON feed, and embed.js show "via <platform> ↗". Migration 003 applied to production.
 2. ~~**Testimonial management**~~ — DONE (Aug 20). "On your walls" panel lists published testimonials with **Unpublish** (returns to Pending, reversible) and **Delete** (permanent, browser-confirmed). Pending rows also get Delete for spam. Both ownership-checked server-side.
-3. **Hide-rating option** — per-form or per-testimonial toggle so a lukewarm 3-star rating doesn't have to appear next to a glowing quote.
+3. ~~**Hide-rating option**~~ — DONE (Aug 20). Per-testimonial "Hide rating / Show rating" toggle in "On your walls"; hides stars on the hosted wall, embed, and JSON feed while the quote stays published. Migration 004 (`testimonials.hide_rating`) applied to production. Bonus: embed no longer fabricates 5 stars for unrated quotes.
 4. **Form & workspace management** — rename and delete (with confirmation; deleting a form archives its testimonials rather than destroying consent records).
 5. **Wall share polish** — Open Graph title/description/image for /w/ pages so walls unfurl nicely when agencies paste them into Slack, LinkedIn, or proposals.
 6. **Silence the pg SSL warning** — add `sslmode=verify-full` to DATABASE_URL in Netlify (cosmetic; the red log line spooks debugging).
