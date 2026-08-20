@@ -4,7 +4,10 @@ import { query, one } from "@factory/core";
 // Public JSON feed of APPROVED testimonials, consumed by /embed.js on customer sites.
 // CORS: open (configured in next.config.mjs) — this data is public by design.
 export async function GET(_req: NextRequest, { params }: { params: { slug: string } }) {
-  const form = await one<{ id: number }>(`select id from forms where slug = $1 and not archived`, [params.slug]);
+  const form = await one<{ id: number; theme: string; layout: string }>(
+    `select id, theme, layout from forms where slug = $1 and not archived`,
+    [params.slug]
+  );
   if (!form) return NextResponse.json({ error: "not found" }, { status: 404 });
 
   const items = await query(
@@ -18,7 +21,7 @@ export async function GET(_req: NextRequest, { params }: { params: { slug: strin
   );
 
   return NextResponse.json(
-    { items },
+    { items, theme: form.theme, layout: form.layout },
     { headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" } }
   );
 }
