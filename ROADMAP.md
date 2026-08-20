@@ -1,15 +1,15 @@
 # Proofloft roadmap
 
-Last updated: August 19, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Claude
+Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Claude
 
 ## Launch checklist (this week — blocking)
 
-- [ ] **Google Safe Browsing review** — verify proofloft.com in Search Console, Security Issues → Request Review (statement drafted; say it's a legitimate SaaS sign-in link, sender moved off resend.dev).
-- [ ] **Sending domain** — verify SPF/DKIM for proofloft.com in Resend; set `EMAIL_FROM=Proofloft <hello@proofloft.com>` in Netlify; redeploy; test that mail to a non-owner address delivers.
-- [ ] **Inbound forwarding** — when Resend receiving MX flips to Verified: set `RESEND_WEBHOOK_SECRET`, `FORWARD_TO=trendinux@gmail.com`, `FORWARD_FROM=forwards@proofloft.com` in Netlify; test legal@ and hello@ reach Gmail.
-- [ ] **Stripe Customer Portal activation** — dashboard → Settings → Billing → Customer portal → Save (test mode now, repeat in live mode).
+- [x] **Google Safe Browsing review** — cleared by Google (Aug 20). Sign-in reverted to link-first, 6-digit code kept as backup.
+- [x] **Sending domain** — proofloft.com Verified in Resend (SPF/DKIM/MX green); sender `Proofloft <hello@proofloft.com>`.
+- [x] **Inbound forwarding** — working (Aug 20). Fix was two envs: `FORWARD_TO`/`FORWARD_FROM` set in Netlify, plus a **Full access** Resend API key (the sending-only key 401'd on the forward call). legal@/hello@ now reach Gmail.
+- [x] **Stripe Customer Portal activation** — done in test mode; repeat in live mode at switch-over.
 - [ ] **Stripe live mode** (Claude) — activate account, recreate Pro/Agency products + monthly prices in live mode, live webhook endpoint at /api/billing/webhook, swap Netlify env to `sk_live_…` + live price IDs + live `whsec_…`. Consider enabling Stripe Tax.
-- [ ] **Final end-to-end self-test on production** — sign in with code → create workspace + form → submit testimonial → approve → check wall + embed → upgrade with real checkout (then refund/cancel).
+- [ ] **Final end-to-end self-test on production** — sign in → create workspace + form → submit testimonial → approve → check wall + embed → upgrade with real checkout (then refund/cancel).
 
 ## Week two
 
