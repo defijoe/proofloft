@@ -20,13 +20,13 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 3. ~~**Hide-rating option**~~ — DONE (Aug 20). Per-testimonial "Hide rating / Show rating" toggle in "On your walls"; hides stars on the hosted wall, embed, and JSON feed while the quote stays published. Migration 004 (`testimonials.hide_rating`) applied to production. Bonus: embed no longer fabricates 5 stars for unrated quotes.
 4. ~~**Form & workspace management**~~ — DONE (Aug 20). "Rename or delete" disclosure on every form row (delete = archive: pages 404, dashboard hides it, testimonials + consent records preserved; blocked from new submissions server-side). Workspace panel gets rename/delete too — deleting a workspace keeps its forms, ungrouped. Migration 005 (`forms.archived`) applied to production.
 5. ~~**Wall share polish**~~ — DONE (Aug 20). OG + Twitter card metadata on /w/ pages, plus a dynamic branded og:image (warm gradient, form name, five stars) rendered per wall via next/og. metadataBase set site-wide.
-6. **Silence the pg SSL warning** — add `sslmode=verify-full` to DATABASE_URL in Netlify (cosmetic; the red log line spooks debugging).
+6. ~~**Silence the pg SSL warning**~~ — DONE (Aug 20). `sslmode=verify-full` added to DATABASE_URL in Netlify; DB connectivity verified on production after the change.
 
 ## Later / backlog
 
 - ~~Annual plans surfaced in the UI~~ — DONE (Aug 20). Homepage pricing shows "or $190/yr / $490/yr (2 months free)"; Account page gets annual upgrade buttons and checkout accepts pro_annual/agency_annual. Buttons are env-gated: they appear once `STRIPE_PRO_ANNUAL_PRICE_ID` and `STRIPE_AGENCY_ANNUAL_PRICE_ID` are set in Netlify (live price IDs already exist).
+- ~~Wall layout options (light/dark theme, card vs. list)~~ — DONE (Aug 20). Per-form "Wall style" control on the dashboard (Theme: Light/Dark, Layout: Cards/List) applies to the hosted wall, the JSON feed, and embed.js. Embeds can also override per site via `data-theme` / `data-layout` attributes. Migration 006 (`forms.theme`, `forms.layout`) applied to production.
 - Consider enabling Stripe Tax before meaningful revenue.
-- Wall layout options (light/dark theme, card vs. list) for embeds on client sites.
 - CSV/JSON export button in Account (today export is by-email per the privacy policy).
 - Fuller settings if demand appears: notification preferences, API access.
 - Simple owner analytics: form views → submissions → approvals funnel (events table already collects the data).
