@@ -259,10 +259,13 @@ export async function billingPortalAction() {
 export async function checkoutAction(formData: FormData) {
   const user = currentUser();
   const plan = String(formData.get("plan") ?? "pro");
-  const priceId =
-    plan === "agency"
-      ? process.env.STRIPE_AGENCY_PRICE_ID
-      : process.env.STRIPE_PRO_PRICE_ID;
+  const PLAN_PRICES: Record<string, string | undefined> = {
+    pro: process.env.STRIPE_PRO_PRICE_ID,
+    agency: process.env.STRIPE_AGENCY_PRICE_ID,
+    pro_annual: process.env.STRIPE_PRO_ANNUAL_PRICE_ID,
+    agency_annual: process.env.STRIPE_AGENCY_ANNUAL_PRICE_ID,
+  };
+  const priceId = PLAN_PRICES[plan];
   if (!priceId) throw new Error(`No Stripe price configured for plan: ${plan}`);
 
   const url = await createCheckoutUrl({
