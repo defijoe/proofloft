@@ -36,11 +36,11 @@ export default async function Dashboard({
           <h1>Sign in</h1>
           <p className="sub">
             {sent
-              ? "We emailed you a 6-digit code and a one-click link — either works."
-              : "We’ll email you a 6-digit code and a sign-in link — no password needed."}
+              ? "Check your email and click the sign-in link — you’ll land right back here."
+              : "We’ll email you a one-click sign-in link — no password needed."}
           </p>
           {sent && !searchParams.code && (
-            <p className="notice-ok">Email sent! Enter the code below or click the link. Both expire in 15 minutes.</p>
+            <p className="notice-ok">Email sent! Click the link inside — it expires in 15 minutes.</p>
           )}
           {searchParams.code === "bad" && (
             <p className="notice-warn">That code didn&rsquo;t match or has expired — check the digits, or request a fresh email below.</p>
@@ -51,26 +51,29 @@ export default async function Dashboard({
 
           {sent && (
             <>
-              <form action={codeLoginAction} className="dash-form" style={{ marginBottom: 18 }}>
-                <input name="email" type="email" required placeholder="you@company.com" className="dash-input" />
-                <input
-                  name="code"
-                  required
-                  placeholder="123456"
-                  className="dash-input code"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  pattern="[0-9]{6}"
-                  maxLength={6}
-                />
-                <button className="dash-btn">Sign in</button>
-              </form>
+              <details className="signin-code" open={searchParams.code === "bad"}>
+                <summary>Link not working? Enter the code from the email instead</summary>
+                <form action={codeLoginAction} className="dash-form" style={{ marginTop: 12 }}>
+                  <input name="email" type="email" required placeholder="you@company.com" className="dash-input" />
+                  <input
+                    name="code"
+                    required
+                    placeholder="123456"
+                    className="dash-input code"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    pattern="[0-9]{6}"
+                    maxLength={6}
+                  />
+                  <button className="dash-btn">Sign in</button>
+                </form>
+              </details>
               <p className="signin-alt">No email after a minute? Check spam, or request a fresh one:</p>
             </>
           )}
           <form action={loginAction} className="dash-form">
             <input name="email" type="email" required placeholder="you@company.com" className="dash-input" />
-            <button className="dash-btn">{sent ? "Resend email" : "Email me a code"}</button>
+            <button className="dash-btn">{sent ? "Resend email" : "Email me a link"}</button>
           </form>
         </div>
       </div>
