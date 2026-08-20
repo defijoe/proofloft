@@ -107,11 +107,14 @@ export default async function Dashboard({
 
   const forms = await query<{
     id: number; slug: string; name: string; ws_name: string | null; total: string; pending: string;
+    organic: string; organic_pub: string;
     theme: string; layout: string;
   }>(
     `select f.id, f.slug, f.name, f.theme, f.layout, w.name as ws_name,
             count(t.id) as total,
-            count(t.id) filter (where not t.approved) as pending
+            count(t.id) filter (where not t.approved) as pending,
+            count(t.id) filter (where t.source is null) as organic,
+            count(t.id) filter (where t.source is null and t.approved) as organic_pub
      from forms f
      left join workspaces w on w.id = f.workspace_id
      left join testimonials t on t.form_id = f.id
@@ -142,6 +145,16 @@ export default async function Dashboard({
      where f.user_id = $1 and not f.archived and t.approved order by t.created_at desc limit 30`,
     [user.id]
   );
+
+  // Funnel: form views per form, from the cookieless events tally.
+  const viewRows = await query<{ form_id: string; views: string }>(
+    `select (meta->>'formId')::bigint as form_id, count(*) as views
+     from events
+     where app = 'testimonial' and name = 'form_view'
+     group by 1`
+  );
+  const viewsByForm = new Map(viewRows.map((v) => [Number(v.form_id), Number(v.views)]));
+  const pct = (part: number, whole: number) => (whole > 0 ? `${Math.round((part / whole) * 100)}%` : null);
 
   const nPending = Number(totals?.pending ?? 0);
 
@@ -374,6 +387,48 @@ export default async function Dashboard({
             </form>
           </div>
         </div>
+
+        {forms.length > 0 && (
+          <div className="panel">
+            <div className="panel-head">
+              <h2>Form performance</h2>
+              <span className="hint">Views → submissions → published · view counting started Aug 2026</span>
+            </div>
+            <div className="panel-body flush">
+              {forms.map((f) => {
+                const views = viewsByForm.get(Number(f.id)) ?? 0;
+                const subs = Number(f.organic);
+                const pub = Number(f.organic_pub);
+                const subRate = pct(subs, views);
+                const pubRate = pct(pub, subs);
+                return (
+                  <div className="frow" key={f.id}>
+                    <div>
+                      <div className="fname">{f.name}</div>
+                      <div className="fmeta">
+                        <b>{views}</b> form view{views === 1 ? "" : "s"}
+                        {" → "}
+                        <b>{subs}</b> submission{subs === 1 ? "" : "s"}{subRate ? ` (${subRate} of views)` : ""}
+                        {" → "}
+                        <b>{pub}</b> published{pubRate ? ` (${pubRate} of submissions)` : ""}
+                        {" · imports not counted"}
+                      </div>
+                    </div>
+                    <div className="fright">
+                      {views > 0 && subs === 0 ? (
+                        <span className="badge-count">views, no submissions yet</span>
+                      ) : subs > 0 ? (
+                        <span className="badge-zero">converting</span>
+                      ) : (
+                        <span className="fmeta">share the link to start</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {forms.length > 0 && (
           <div className="panel">
