@@ -299,10 +299,12 @@ export default async function Dashboard({
                     <a href={`/f/${f.slug}`} target="_blank" className="flink">Open form ↗</a>
                     {" · "}
                     <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>
-                    {" · "}Share: <span className="fcode">/f/{f.slug}</span>
+                    {" · "}Share: <span className="fcode">https://proofloft.com/f/{f.slug}</span>
                   </div>
                   <div className="fmeta">
                     Embed the wall: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
+                    {" · "}
+                    <a href="/docs/embed" target="_blank" className="flink">How to embed ↗</a>
                   </div>
                   <details className="manage">
                     <summary>Wall style, rename, or delete</summary>
