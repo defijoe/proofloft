@@ -22,9 +22,14 @@ export default function SiteFooter() {
             — testimonials for every client you have.
             <br />Operated by Media Yard LLC. Payments securely processed by Stripe.
             <br />Minimal data by design: testimonials and emails, nothing else.
+            <br />Support: <a href="mailto:hello@proofloft.com">hello@proofloft.com</a>
             <br />© {new Date().getFullYear()} Media Yard LLC. All rights reserved.
           </div>
           <div style={{ textAlign: "right" }}>
+            <Link href="/about">About us</Link>
+            <br />
+            <Link href="/docs/embed">How to embed</Link>
+            <br />
             <Link href="/vs/senja">Proofloft vs Senja</Link>
             <br />
             <Link href="/vs/testimonial-to">Proofloft vs Testimonial.to</Link>
