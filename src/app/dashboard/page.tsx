@@ -23,6 +23,7 @@ import {
   renameWorkspaceAction,
   toggleRatingAction,
   unpublishAction,
+  wallAppearanceAction,
 } from "./actions";
 import ConfirmButton from "./confirm-button";
 import { SOURCE_LABELS, sourceLabel } from "../sources";
@@ -106,8 +107,9 @@ export default async function Dashboard({
 
   const forms = await query<{
     id: number; slug: string; name: string; ws_name: string | null; total: string; pending: string;
+    theme: string; layout: string;
   }>(
-    `select f.id, f.slug, f.name, w.name as ws_name,
+    `select f.id, f.slug, f.name, f.theme, f.layout, w.name as ws_name,
             count(t.id) as total,
             count(t.id) filter (where not t.approved) as pending
      from forms f
@@ -303,7 +305,27 @@ export default async function Dashboard({
                     Embed the wall: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
                   </div>
                   <details className="manage">
-                    <summary>Rename or delete</summary>
+                    <summary>Wall style, rename, or delete</summary>
+                    <div className="manage-row">
+                      <form action={wallAppearanceAction} className="dash-form">
+                        <input type="hidden" name="form_id" value={f.id} />
+                        <label className="mlabel">
+                          Theme
+                          <select name="theme" defaultValue={f.theme} className="dash-input">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                          </select>
+                        </label>
+                        <label className="mlabel">
+                          Layout
+                          <select name="layout" defaultValue={f.layout} className="dash-input">
+                            <option value="cards">Cards</option>
+                            <option value="list">List</option>
+                          </select>
+                        </label>
+                        <button className="dash-btn sm">Save style</button>
+                      </form>
+                    </div>
                     <div className="manage-row">
                       <form action={renameFormAction} className="dash-form" style={{ flex: 1 }}>
                         <input type="hidden" name="form_id" value={f.id} />
