@@ -330,6 +330,11 @@ a { color: inherit; }
 .acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
 .dash-input.code { flex: 1 1 110px; max-width: 150px; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .25em; text-align: center; font-weight: 700; }
 .signin-alt { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; }
+/* Collapsed backup-code entry on the sign-in card (link-first flow). */
+.signin-code { margin: 0 0 18px; }
+.signin-code summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-3); text-decoration: underline; text-underline-offset: 2px; list-style: none; }
+.signin-code summary::-webkit-details-marker { display: none; }
+.signin-code summary:hover { color: var(--ink); }
 
 /* ---------- quick-start guide + form-row links ---------- */
 .guide-steps { margin: 0; padding-left: 22px; display: grid; gap: 12px; font-size: 14.5px; color: var(--ink-2); line-height: 1.65; }
