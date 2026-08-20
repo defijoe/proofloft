@@ -17,6 +17,7 @@ import {
   importTestimonialAction,
   loginAction,
   codeLoginAction,
+  toggleRatingAction,
   unpublishAction,
 } from "./actions";
 import ConfirmButton from "./confirm-button";
@@ -129,8 +130,8 @@ export default async function Dashboard({
     [user.id]
   );
 
-  const publishedItems = await query<{ id: number; author_name: string; author_title: string | null; rating: number | null; body: string; form_name: string; source: string | null }>(
-    `select t.id, t.author_name, t.author_title, t.rating, t.body, f.name as form_name, t.source
+  const publishedItems = await query<{ id: number; author_name: string; author_title: string | null; rating: number | null; hide_rating: boolean; body: string; form_name: string; source: string | null }>(
+    `select t.id, t.author_name, t.author_title, t.rating, t.hide_rating, t.body, f.name as form_name, t.source
      from testimonials t join forms f on f.id = t.form_id
      where f.user_id = $1 and t.approved order by t.created_at desc limit 30`,
     [user.id]
@@ -413,12 +414,23 @@ export default async function Dashboard({
                     <span className="ws-tag">{t.form_name}</span>
                   </div>
                   <div className="fmeta">
-                    {t.rating ? <>{"★".repeat(t.rating)}{" · "}</> : null}
+                    {t.rating ? (
+                      <span style={t.hide_rating ? { textDecoration: "line-through", opacity: 0.55 } : undefined}>
+                        {"★".repeat(t.rating)}{t.hide_rating ? " hidden" : ""}
+                      </span>
+                    ) : null}
+                    {t.rating ? " · " : null}
                     &ldquo;{t.body.length > 140 ? `${t.body.slice(0, 140)}…` : t.body}&rdquo;
                     {t.source ? <> · via {sourceLabel(t.source)}</> : null}
                   </div>
                 </div>
                 <div className="fright trow-actions">
+                  {t.rating ? (
+                    <form action={toggleRatingAction} style={{ display: "inline" }}>
+                      <input type="hidden" name="id" value={t.id} />
+                      <button className="ttoggle">{t.hide_rating ? "Show rating" : "Hide rating"}</button>
+                    </form>
+                  ) : null}
                   <form action={unpublishAction} style={{ display: "inline" }}>
                     <input type="hidden" name="id" value={t.id} />
                     <button className="dash-btn sm">Unpublish</button>
