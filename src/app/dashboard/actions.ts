@@ -96,6 +96,53 @@ export async function createFormAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+export async function renameFormAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("form_id"));
+  const name = String(formData.get("name") ?? "").slice(0, 120).trim();
+  if (!id || !name) return;
+  await query(`update forms set name = $1 where id = $2 and user_id = $3`, [name, id, user.id]);
+  revalidatePath("/dashboard");
+}
+
+/**
+ * "Delete" a form = archive it. The form and wall pages go offline and the
+ * dashboard hides it, but testimonials and their consent records are kept —
+ * consent is a legal record, never destroyed by a UI action.
+ */
+export async function archiveFormAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("form_id"));
+  await query(`update forms set archived = true where id = $1 and user_id = $2`, [id, user.id]);
+  await track("testimonial", "form_archived", { userId: user.id });
+  revalidatePath("/dashboard");
+}
+
+export async function renameWorkspaceAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("workspace_id"));
+  const name = String(formData.get("name") ?? "").slice(0, 80).trim();
+  if (!id || !name) return;
+  // The NOT EXISTS guard sidesteps the (user_id, name) unique constraint
+  // instead of throwing when renaming to a name that's already taken.
+  await query(
+    `update workspaces w set name = $1
+     where w.id = $2 and w.user_id = $3
+       and not exists (select 1 from workspaces x where x.user_id = $3 and x.name = $1 and x.id <> $2)`,
+    [name, id, user.id]
+  );
+  revalidatePath("/dashboard");
+}
+
+/** Delete a workspace. Its forms are kept and simply become ungrouped. */
+export async function deleteWorkspaceAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("workspace_id"));
+  await query(`update forms set workspace_id = null where workspace_id = $1 and user_id = $2`, [id, user.id]);
+  await query(`delete from workspaces where id = $1 and user_id = $2`, [id, user.id]);
+  revalidatePath("/dashboard");
+}
+
 /** Allowed import sources — anything else is stored as "other". */
 const IMPORT_SOURCES = ["email", "x", "linkedin", "instagram", "google", "g2", "other"] as const;
 
