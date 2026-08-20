@@ -3,6 +3,7 @@
 // growth loop (badge links back), so getting them indexed helps customers AND us.
 import { MetadataRoute } from "next";
 import { query } from "@factory/core";
+import { POSTS } from "./blog/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +17,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE}/vs/senja`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/vs/testimonial-to`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
     { url: `${BASE}/about`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    ...POSTS.map((p) => ({
+      url: `${BASE}/blog/${p.slug}`,
+      lastModified: new Date(`${p.date}T12:00:00Z`),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: `${BASE}/legal/terms`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE}/legal/privacy`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE}/legal/ai`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
