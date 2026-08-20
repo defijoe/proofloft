@@ -13,11 +13,14 @@ import {
   createFormAction,
   createWorkspaceAction,
   checkoutAction,
+  deleteTestimonialAction,
   importTestimonialAction,
   loginAction,
   codeLoginAction,
+  unpublishAction,
 } from "./actions";
-import { SOURCE_LABELS } from "../sources";
+import ConfirmButton from "./confirm-button";
+import { SOURCE_LABELS, sourceLabel } from "../sources";
 
 export const dynamic = "force-dynamic";
 
@@ -123,6 +126,13 @@ export default async function Dashboard({
     `select t.id, t.author_name, t.author_title, t.rating, t.body, f.name as form_name
      from testimonials t join forms f on f.id = t.form_id
      where f.user_id = $1 and not t.approved order by t.created_at desc limit 20`,
+    [user.id]
+  );
+
+  const publishedItems = await query<{ id: number; author_name: string; author_title: string | null; rating: number | null; body: string; form_name: string; source: string | null }>(
+    `select t.id, t.author_name, t.author_title, t.rating, t.body, f.name as form_name, t.source
+     from testimonials t join forms f on f.id = t.form_id
+     where f.user_id = $1 and t.approved order by t.created_at desc limit 30`,
     [user.id]
   );
 
@@ -365,10 +375,64 @@ export default async function Dashboard({
                   {t.rating ? <span className="stars-inline">{"★".repeat(t.rating)}</span> : null}
                 </div>
                 <blockquote>{t.body}</blockquote>
-                <form action={approveAction}>
-                  <input type="hidden" name="id" value={t.id} />
-                  <button className="dash-btn sm yellow">Approve &amp; publish</button>
-                </form>
+                <div className="trow-actions">
+                  <form action={approveAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <button className="dash-btn sm yellow">Approve &amp; publish</button>
+                  </form>
+                  <form action={deleteTestimonialAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <ConfirmButton
+                      className="tdelete"
+                      message={`Permanently delete the testimonial from ${t.author_name}? This cannot be undone.`}
+                    >
+                      Delete
+                    </ConfirmButton>
+                  </form>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="panel">
+          <div className="panel-head">
+            <h2>On your walls</h2>
+            <span className="hint">Unpublish sends it back to Pending; delete is permanent</span>
+          </div>
+          <div className="panel-body flush">
+            {publishedItems.length === 0 && (
+              <div className="panel-empty">Nothing published yet — approve a submission or add one above.</div>
+            )}
+            {publishedItems.map((t) => (
+              <div className="frow" key={t.id}>
+                <div>
+                  <div className="fname">
+                    {t.author_name}
+                    {t.author_title ? <span style={{ fontWeight: 400, color: "var(--ink-3)" }}> · {t.author_title}</span> : null}
+                    <span className="ws-tag">{t.form_name}</span>
+                  </div>
+                  <div className="fmeta">
+                    {t.rating ? <>{"★".repeat(t.rating)}{" · "}</> : null}
+                    &ldquo;{t.body.length > 140 ? `${t.body.slice(0, 140)}…` : t.body}&rdquo;
+                    {t.source ? <> · via {sourceLabel(t.source)}</> : null}
+                  </div>
+                </div>
+                <div className="fright trow-actions">
+                  <form action={unpublishAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <button className="dash-btn sm">Unpublish</button>
+                  </form>
+                  <form action={deleteTestimonialAction} style={{ display: "inline" }}>
+                    <input type="hidden" name="id" value={t.id} />
+                    <ConfirmButton
+                      className="tdelete"
+                      message={`Permanently delete the testimonial from ${t.author_name}? This cannot be undone.`}
+                    >
+                      Delete
+                    </ConfirmButton>
+                  </form>
+                </div>
               </div>
             ))}
           </div>
