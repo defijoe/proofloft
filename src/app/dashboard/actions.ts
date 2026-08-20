@@ -158,6 +158,31 @@ export async function approveAction(formData: FormData) {
   revalidatePath("/dashboard");
 }
 
+/** Take a published testimonial off the wall — it returns to Pending approval. */
+export async function unpublishAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("id"));
+  await query(
+    `update testimonials t set approved = false
+     from forms f where t.id = $1 and t.form_id = f.id and f.user_id = $2`,
+    [id, user.id]
+  );
+  revalidatePath("/dashboard");
+}
+
+/** Permanently delete a testimonial (spam, duplicates, takedown requests). */
+export async function deleteTestimonialAction(formData: FormData) {
+  const user = currentUser();
+  const id = Number(formData.get("id"));
+  await query(
+    `delete from testimonials t
+     using forms f where t.id = $1 and t.form_id = f.id and f.user_id = $2`,
+    [id, user.id]
+  );
+  await track("testimonial", "testimonial_deleted", { userId: user.id });
+  revalidatePath("/dashboard");
+}
+
 export async function billingPortalAction() {
   const user = currentUser();
   let url: string | null = null;
