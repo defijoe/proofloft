@@ -9,6 +9,10 @@
   --amber: #e8960c;
   --amber-soft: #fdf3e0;
   --green: #1f7a43;
+  /* CTA ember: reserved for clickable action buttons ONLY. Yellow (#f6cf4f) is
+     decoration/status; black pills are data. White on --cta: 5.02:1 (AA). */
+  --cta: #b45309;
+  --cta-hover: #96430a;
   --display: "Space Grotesk", "Segoe UI", -apple-system, sans-serif;
   --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
@@ -48,14 +52,15 @@ a { color: inherit; }
 
 /* ---------- buttons ---------- */
 .btn {
-  display: inline-block; background: #1d1d1f; color: #fff;
+  display: inline-block; background: var(--cta); color: #fff;
   padding: 13px 28px; border-radius: 999px; text-decoration: none;
   font-weight: 600; font-size: 15.5px; border: 0; cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
   box-shadow: 0 1px 2px rgba(26,22,17,.18);
 }
-.btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,22,17,.16); }
-.btn-yellow { background: #f6cf4f; color: #1d1d1f; }
+.btn:hover { background: var(--cta-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,22,17,.16); }
+/* Legacy alias — yellow buttons retired; everything maps to the ember CTA. */
+.btn-yellow { background: var(--cta); color: #fff; }
 .btn-sm { padding: 9px 20px; font-size: 14px; border-radius: 999px; }
 .btn-ghost { background: transparent; color: var(--ink-2); box-shadow: none; font-weight: 500; }
 .btn-ghost:hover { color: var(--ink); box-shadow: none; }
@@ -115,7 +120,7 @@ a { color: inherit; }
 .plan.hot .per { color: #9b9b9f; }
 .plan.hot ul { color: #d9d9dc; }
 .plan.hot li::before { color: #f6cf4f; }
-.plan.hot .btn { background: #f6cf4f; color: #1d1d1f; }
+.plan.hot .btn { background: var(--cta); color: #fff; }
 .plan .badge {
   position: absolute; top: -13px; left: 26px; background: #f6cf4f; color: #1d1d1f;
   font-size: 11.5px; font-weight: 700; letter-spacing: .06em; padding: 5px 14px; border-radius: 999px;
@@ -221,12 +226,11 @@ a { color: inherit; }
 .dash-btn { background: #1d1d1f; color: #fff; border: 0; border-radius: 999px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: transform .12s ease, background .12s ease; }
 .dash-btn:hover { background: #313134; transform: translateY(-1px); }
 .dash-btn:disabled { background: #dcd8cc; color: #55524a; cursor: not-allowed; transform: none; } /* 5.47:1 (disabled is WCAG-exempt, but keep it legible) */
-.dash-btn.yellow { background: #f6cf4f; color: #1d1d1f; }
-.dash-btn.yellow:hover { background: #f2c62f; }
-.dash-btn.green { background: #f6cf4f; color: #1d1d1f; }
-.dash-btn.green:hover { background: #f2c62f; }
-.dash-btn.amber { background: #f6cf4f; color: #1d1d1f; }
-.dash-btn.amber:hover { background: #f2c62f; }
+/* Accent action buttons: ember, matching the marketing CTAs. Yellow is
+   reserved for status pills (.badge-count, .pill.yellow) so nothing
+   non-clickable can be mistaken for a button. */
+.dash-btn.yellow, .dash-btn.green, .dash-btn.amber { background: var(--cta); color: #fff; }
+.dash-btn.yellow:hover, .dash-btn.green:hover, .dash-btn.amber:hover { background: var(--cta-hover); }
 .dash-btn.sm { padding: 9px 18px; font-size: 13px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -279,7 +283,7 @@ a { color: inherit; }
 .cta-band { background: #212123; color: #fff; border-radius: 30px; padding: 52px 40px; margin-top: 80px; text-align: center; box-shadow: 0 16px 44px rgba(29,29,31,.26); }
 .cta-band h2 { color: #fff; font-size: clamp(26px, 3.6vw, 36px); font-weight: 600; margin: 0 0 10px; letter-spacing: -0.025em; }
 .cta-band p { color: #b9b9be; font-size: 16px; margin: 0 0 26px; }
-.cta-band .btn { background: #f6cf4f; color: #1d1d1f; }
+.cta-band .btn { background: var(--cta); color: #fff; }
 .cta-band .note { font-size: 13px; color: #8f8f94; margin-top: 14px; }
 
 .cmp { border: 0; border-radius: 20px; box-shadow: 0 2px 12px rgba(29,29,31,.05); }
