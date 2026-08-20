@@ -36,7 +36,7 @@
       .map(function (t) {
         return (
           '<figure style="break-inside:avoid;background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:18px;margin:0 0 14px;font-family:inherit">' +
-          '<div style="color:#f5a623;font-size:14px;letter-spacing:2px">' + stars(t.rating || 5) + "</div>" +
+          (t.rating ? '<div style="color:#f5a623;font-size:14px;letter-spacing:2px">' + stars(t.rating) + "</div>" : "") +
           '<blockquote style="margin:10px 0;font-size:15px;line-height:1.55;color:#222">' + esc(t.body) + "</blockquote>" +
           '<figcaption style="font-size:13px;color:#666"><b style="color:#111">' + esc(t.author_name) + "</b>" +
           (t.author_title ? " · " + esc(t.author_title) : "") +
