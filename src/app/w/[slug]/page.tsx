@@ -8,10 +8,26 @@ import { sourceLabel } from "../../sources";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const form = await one<{ name: string }>(`select name from forms where slug = $1`, [params.slug]);
+  const form = await one<{ name: string }>(
+    `select name from forms where slug = $1 and not archived`,
+    [params.slug]
+  );
+  const title = form ? `${form.name} — testimonials` : "Wall of love";
+  const description = form
+    ? `What people say about ${form.name}. Collected with Proofloft.`
+    : undefined;
   return {
-    title: form ? `${form.name} — testimonials` : "Wall of love",
-    description: form ? `What people say about ${form.name}. Collected with Proofloft.` : undefined,
+    title,
+    description,
+    // og:image comes from the opengraph-image.tsx file convention alongside this page.
+    openGraph: {
+      title,
+      description,
+      type: "website",
+      siteName: "Proofloft",
+      url: `https://proofloft.com/w/${params.slug}`,
+    },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
