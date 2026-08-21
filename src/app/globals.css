@@ -397,3 +397,43 @@ a.tsource:hover { color: var(--ink); }
 .guide-tip { background: #faeec6; border-radius: 14px; padding: 12px 18px; font-size: 13.5px; color: #5c4a10; margin: 16px 0 0; line-height: 1.55; }
 .flink { font-weight: 600; color: #7a5205; text-decoration: underline; text-underline-offset: 2px; }
 .flink:hover { color: var(--ink); }
+
+/* ---------- mobile pass (fixes: nav overflow -> page-wide horizontal scroll,
+   forced-right footer, oversized paddings on small screens) ---------- */
+html, body { overflow-x: hidden; } /* safety net: nothing may widen the page */
+
+@media (max-width: 720px) {
+  /* Nav: stack logo above a centered, wrapping link row */
+  .nav { flex-wrap: wrap; justify-content: center; row-gap: 12px; padding: 18px 0 14px; }
+  .logo { flex-basis: 100%; justify-content: center; }
+  .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px 18px; font-size: 14px; }
+
+  /* Hero: tighter type + spacing */
+  .hero { padding: 34px 0 22px; }
+  .hero h1 { font-size: clamp(30px, 8.6vw, 44px); }
+  .hero .sub { font-size: 17px; }
+  .section { padding: 50px 0 0; }
+
+  /* Footer: single column, everything left-aligned (overrides the inline
+     right-align on the links column) */
+  .footer { margin-top: 60px; padding: 28px 0 40px; }
+  .footer .cols { flex-direction: column; gap: 26px; }
+  .footer .cols > div { text-align: left !important; }
+
+  /* Cards & bands: less padding so text gets the width */
+  .cta-band { padding: 36px 20px; margin-top: 56px; }
+  .capture-card { padding: 26px 20px 30px; }
+  .legal { padding: 26px 18px 30px; }
+  .pain { padding: 22px 20px; }
+
+  /* Comparison table (vs pages): scroll inside its own box, never the page */
+  .cmp { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  /* Dashboard: rows may wrap on narrow screens */
+  .dash-wrap { padding: 0 16px; }
+  .frow { flex-wrap: wrap; }
+  .frow .fright { text-align: left; }
+  .fright.trow-actions { justify-content: flex-start; }
+  .pstats { gap: 14px; }
+  .pill { min-width: 104px; height: 42px; padding: 0 16px; }
+}
