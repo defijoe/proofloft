@@ -66,7 +66,9 @@ a { color: inherit; }
 .btn-ghost:hover { color: var(--ink); box-shadow: none; }
 
 /* ---------- hero ---------- */
-.hero { padding: 64px 0 30px; text-align: center; }
+/* padding-top/bottom longhands: .hero/.section share elements with .wrap —
+   a `padding` shorthand here would zero out .wrap's 24px side gutters. */
+.hero { padding-top: 64px; padding-bottom: 30px; text-align: center; }
 .eyebrow {
   display: inline-flex; align-items: center; gap: 7px; background: #fff; color: #1d1d1f;
   border-radius: 999px; padding: 8px 18px; box-shadow: 0 1px 3px rgba(29,29,31,.08);
@@ -116,7 +118,7 @@ a { color: inherit; }
 .wall-dark a.tsource:hover { color: #fff; }
 
 /* ---------- sections ---------- */
-.section { padding: 70px 0 0; }
+.section { padding-top: 70px; padding-bottom: 0; }
 .section h2 { font-size: clamp(26px, 3.6vw, 34px); margin: 0 0 14px; }
 .section .lede { font-size: 17px; color: var(--ink-2); max-width: 640px; }
 .kicker { font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8a5c06; margin-bottom: 10px; } /* darkened amber: 5.05:1 (raw #e8960c was 2.08:1) */
@@ -403,16 +405,19 @@ a.tsource:hover { color: var(--ink); }
 html, body { overflow-x: hidden; } /* safety net: nothing may widen the page */
 
 @media (max-width: 720px) {
+  /* Long pill can now wrap inside the padded box instead of clipping */
+  .eyebrow { max-width: 100%; }
+
   /* Nav: stack logo above a centered, wrapping link row */
   .nav { flex-wrap: wrap; justify-content: center; row-gap: 12px; padding: 18px 0 14px; }
   .logo { flex-basis: 100%; justify-content: center; }
   .nav-links { width: 100%; justify-content: center; flex-wrap: wrap; gap: 10px 18px; font-size: 14px; }
 
-  /* Hero: tighter type + spacing */
-  .hero { padding: 34px 0 22px; }
+  /* Hero: tighter type + spacing (longhands — see note on .hero above) */
+  .hero { padding-top: 34px; padding-bottom: 22px; }
   .hero h1 { font-size: clamp(30px, 8.6vw, 44px); }
   .hero .sub { font-size: 17px; }
-  .section { padding: 50px 0 0; }
+  .section { padding-top: 50px; }
 
   /* Footer: single column, everything left-aligned (overrides the inline
      right-align on the links column) */
@@ -430,7 +435,7 @@ html, body { overflow-x: hidden; } /* safety net: nothing may widen the page */
   .cmp { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   /* Dashboard: rows may wrap on narrow screens */
-  .dash-wrap { padding: 0 16px; }
+  .dash-wrap { padding: 0 24px; }
   .frow { flex-wrap: wrap; }
   .frow .fright { text-align: left; }
   .fright.trow-actions { justify-content: flex-start; }
