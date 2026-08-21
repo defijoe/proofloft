@@ -1,6 +1,6 @@
 # Proofloft roadmap
 
-Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Claude
+Last updated: August 21, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Claude
 
 ## Launch checklist (this week — blocking)
 
@@ -37,7 +37,7 @@ Last updated: August 20, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 Principle: every new product reuses the same buyer (agencies/SMBs), the same engine (collect → approve → display, consent records, magic-link auth, zero-SDK Stripe, Resend email), and the same distribution. Ranked:
 
 1. **Proofloft distribution first.** No new product until Proofloft has its first real agencies — everything below doubles in value once there's a customer base to cross-sell.
-2. **ReviewLoft** — review funnel for local businesses. Collect a rating; 4–5★ routes to "post it on Google," 1–3★ routes to a private feedback inbox. Sold to local SMBs ($50–100/mo/location) and white-labeled through agencies (same buyer as Proofloft). **Domain secured: getreviewloft.com** (bought on Netlify, Aug 20 — reviewloft.com is parked/taken; brand stays "ReviewLoft"). **v1 built & e2e-tested Aug 21** (landing modeled on onbento.com's playbook, 60-second onboarding with QR, Google-compliant star funnel, private feedback inbox, free early access — no Stripe yet); awaiting Jon-side deploy: GitHub repo + Neon DB + Netlify site + domain (checklist in the delivered zip's DEPLOY.md).
+2. **ReviewLoft — 🚀 LIVE at [getreviewloft.com](https://getreviewloft.com) (Aug 21, 2026).** Review funnel for local businesses: 4–5★ routes to "post it on Google," 1–3★ routes to a private feedback inbox (every rater can still reach Google — compliant with Google's review policies). Free early access, $49/mo/location at launch pricing later; white-label through agencies is the cross-sell. Repo: trendinux/reviewloft · Neon DB `reviewloft` · Netlify site `reviewloft`. Production verified Aug 21: landing, sign-in, funnel 404s, legal, sitemap, DB connectivity. **Remaining ReviewLoft setup:** verify getreviewloft.com in Resend + set `EMAIL_FROM` (until then, sign-in emails only deliver to the Resend account owner's address); optional inbound forwarding for hello@/legal@ (same recipe as Proofloft).
 3. **Client report sender for agencies** — branded monthly "what we did + results" report pages with view receipts. Same buyer as Proofloft; best cross-sell.
 4. **Case-study generator** — AI-assisted testimonial → case study page. Not a separate product; a Proofloft upsell tier.
 
