@@ -32,6 +32,19 @@ export async function POST(req: NextRequest) {
   const event = JSON.parse(payload);
   if (event?.type !== "email.received") return NextResponse.json({ ok: true });
 
+  // The Resend account receives mail for multiple domains (proofloft.com,
+  // getreviewloft.com), and email.received webhooks fire ACCOUNT-wide — every
+  // endpoint sees every domain's mail. Only forward mail actually addressed
+  // to our domain, or each app would forward the other's messages too.
+  const OUR_DOMAIN = "@proofloft.com";
+  const recipients = [
+    ...(Array.isArray(event.data?.to) ? event.data.to : []),
+    ...(Array.isArray(event.data?.cc) ? event.data.cc : []),
+  ].map((r: unknown) => String(r).toLowerCase());
+  if (!recipients.some((r) => r.includes(OUR_DOMAIN))) {
+    return NextResponse.json({ ok: true }); // another domain's mail — not ours
+  }
+
   const to = process.env.FORWARD_TO;
   if (!to) {
     console.log("[inbound] FORWARD_TO not set — dropping", event?.data?.email_id);
