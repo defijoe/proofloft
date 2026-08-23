@@ -31,6 +31,8 @@ Last updated: August 23, 2026 · Owner: Jon (Media Yard LLC) · Engineering: Cla
 - Fuller settings if demand appears: notification preferences, API access.
 - ~~Simple owner analytics~~ — DONE (Aug 20). "Form performance" panel on the dashboard: views → submissions → published per form with conversion rates. Views come from a new cookieless `form_view` event on /f pages (counting starts Aug 20, 2026); submissions/published come from the testimonials table, organic only (imports excluded). No migration needed.
 - Testimonial request reminders (polite nudge email to people who haven't submitted).
+- ~~Support page~~ — DONE (Aug 23). /support live on BOTH sites (billing/cancel, product how-tos, sign-in troubleshooting, data/privacy), linked from footers + sitemaps. Also useful as the public support URL Stripe asks for.
+- Stripe branding — brand kits generated Aug 23 for both products (icon 512 + horizontal logo, PNG; ReviewLoft: brand #1e4634 / accent #d9a326; Proofloft: brand #b45309 / accent #e8960c). NOTE: branding is account-wide on the shared Stripe account — whichever set Jon uploads shows on BOTH products' checkouts; clean fix later is a second Stripe account per brand (then migrate ReviewLoft's product/prices/webhook).
 
 ## Factory — next products (strategy set Aug 20, 2026)
 
