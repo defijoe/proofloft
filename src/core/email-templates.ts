@@ -1,7 +1,7 @@
 /**
  * Branded transactional email shell. Email-safe: single-column table layout,
  * fully inline styles, system font stack, no external images. Matches the
- * warm-gradient style guide (cream canvas, white rounded card, black pill CTA,
+ * warm-gradient style guide (cream canvas, white rounded card, ember CTA button,
  * yellow accents).
  */
 
@@ -24,8 +24,8 @@ export function brandedEmail(opts: {
     opts.ctaLabel && opts.ctaUrl
       ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:26px 0 4px"><tr><td>
            <a href="${opts.ctaUrl}"
-              style="display:inline-block;background:#1d1d1f;color:#ffffff;text-decoration:none;
-                     font-weight:600;font-size:15px;padding:13px 30px;border-radius:999px;font-family:${FONT}">
+              style="display:inline-block;background:#b45309;color:#ffffff;text-decoration:none;
+                     font-weight:600;font-size:15px;padding:13px 30px;border-radius:10px;font-family:${FONT}">
              ${opts.ctaLabel}
            </a>
          </td></tr></table>`
