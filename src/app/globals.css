@@ -53,7 +53,7 @@ a { color: inherit; }
 /* ---------- buttons ---------- */
 .btn {
   display: inline-block; background: var(--cta); color: #fff;
-  padding: 13px 28px; border-radius: 999px; text-decoration: none;
+  padding: 13px 28px; border-radius: 10px; text-decoration: none;
   font-weight: 600; font-size: 15.5px; border: 0; cursor: pointer;
   transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
   box-shadow: 0 1px 2px rgba(26,22,17,.18);
@@ -61,7 +61,7 @@ a { color: inherit; }
 .btn:hover { background: var(--cta-hover); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(26,22,17,.16); }
 /* Legacy alias — yellow buttons retired; everything maps to the ember CTA. */
 .btn-yellow { background: var(--cta); color: #fff; }
-.btn-sm { padding: 9px 20px; font-size: 14px; border-radius: 999px; }
+.btn-sm { padding: 9px 20px; font-size: 14px; border-radius: 10px; }
 .btn-ghost { background: transparent; color: var(--ink-2); box-shadow: none; font-weight: 500; }
 .btn-ghost:hover { color: var(--ink); box-shadow: none; }
 
@@ -245,11 +245,12 @@ a { color: inherit; }
 .dash-form { display: flex; gap: 10px; flex-wrap: wrap; }
 /* min-width: 0 lets inputs shrink inside flex rows — Safari otherwise enforces the
    input's intrinsic width and pushes the row out of its card. */
-.dash-input { flex: 1 1 160px; min-width: 0; padding: 12px 20px; border-radius: 999px; border: 1px solid #e5e0d1; font-size: 14.5px; font-family: inherit; background: #fff; color: #1d1d1f; }
+.dash-input { flex: 1 1 160px; min-width: 0; padding: 12px 20px; border-radius: 10px; border: 1px solid #e5e0d1; font-size: 14.5px; font-family: inherit; background: #fff; color: #1d1d1f; }
 .dash-input::placeholder { color: #a29e94; }
 .dash-input:focus { outline: 2px solid #f6cf4f66; border-color: #e8b90c; }
-.dash-btn { background: #1d1d1f; color: #fff; border: 0; border-radius: 999px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: transform .12s ease, background .12s ease; }
-.dash-btn:hover { background: #313134; transform: translateY(-1px); }
+/* One CTA color everywhere: the brand ember. Square with rounded corners. */
+.dash-btn { background: var(--cta); color: #fff; border: 0; border-radius: 10px; padding: 12px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: transform .12s ease, background .12s ease; }
+.dash-btn:hover { background: var(--cta-hover); transform: translateY(-1px); }
 .dash-btn:disabled { background: #dcd8cc; color: #55524a; cursor: not-allowed; transform: none; } /* 5.47:1 (disabled is WCAG-exempt, but keep it legible) */
 /* Accent action buttons: ember, matching the marketing CTAs. Yellow is
    reserved for status pills (.badge-count, .pill.yellow) so nothing
