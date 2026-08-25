@@ -87,14 +87,14 @@ export default function Landing() {
               </div>
             </div>
             {/* pending approval card */}
-            <div className="rounded-2xl bg-ink p-5 text-[#f5efe2] sm:p-6">
-              <div className="text-[13px] font-semibold uppercase tracking-[1px] text-[#c9bfa8]">
+            <div className="rounded-2xl bg-navy p-5 text-[#eef2f9] sm:p-6">
+              <div className="text-[13px] font-semibold uppercase tracking-[1px] text-[#b3c0da]">
                 Pending approval
               </div>
               <blockquote className="m-0 mt-3 text-[17px] leading-relaxed">
                 &ldquo;They rebuilt our site in three weeks and signups doubled the month after launch.&rdquo;
               </blockquote>
-              <div className="mt-2 text-[14px] text-[#c9bfa8]">
+              <div className="mt-2 text-[14px] text-[#b3c0da]">
                 Sara Kim · COO, Brightside Foods <span className="text-amber">★★★★★</span>
               </div>
               <span className="dash-btn sm yellow mt-4 inline-block">Approve &amp; publish</span>
@@ -108,18 +108,18 @@ export default function Landing() {
 
       {/* ---- Price-pain band ---- */}
       <section className="wrap pt-14">
-        <div className="mx-auto max-w-[900px] rounded-card bg-ink p-8 text-[#f5efe2] sm:p-12">
+        <div className="mx-auto max-w-[900px] rounded-card bg-navy p-8 text-[#eef2f9] sm:p-12">
           <h2 className="text-center text-[clamp(26px,3.6vw,36px)] text-white">
             Ten client workspaces shouldn&rsquo;t cost more than your CRM.
           </h2>
           <div className="mx-auto mt-8 grid max-w-[560px] gap-3 text-[17px]">
             <div className="flex items-baseline justify-between gap-4 rounded-xl bg-white/5 px-5 py-4">
               <span><b>Senja</b> at 10 client workspaces</span>
-              <span className="whitespace-nowrap text-[#c9bfa8]">~$109/mo</span>
+              <span className="whitespace-nowrap text-[#b3c0da]">~$109/mo</span>
             </div>
             <div className="flex items-baseline justify-between gap-4 rounded-xl bg-white/5 px-5 py-4">
               <span><b>Testimonial.to</b> at 10 spaces</span>
-              <span className="whitespace-nowrap text-[#c9bfa8]">~$500/mo</span>
+              <span className="whitespace-nowrap text-[#b3c0da]">~$500/mo</span>
             </div>
             <div className="flex items-baseline justify-between gap-4 rounded-xl bg-amber/15 px-5 py-4 ring-1 ring-amber/40">
               <span><b>Proofloft</b> — at 10 <i>or 50</i> clients</span>
@@ -140,7 +140,7 @@ export default function Landing() {
             { n: "3", t: "Embed the wall", d: "One script tag on your site or your proposals. New approvals appear automatically." },
           ].map((s) => (
             <div key={s.n} className="rounded-card bg-white p-7 shadow-card">
-              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-ink font-display text-[19px] font-bold text-white">
+              <div className="flex h-11 w-11 items-center justify-center rounded-full bg-navy font-display text-[19px] font-bold text-white">
                 {s.n}
               </div>
               <h3 className="mt-4 text-[20px]">{s.t}</h3>
@@ -227,8 +227,8 @@ export default function Landing() {
             </div>
           </div>
           {/* Agency — highlighted */}
-          <div className="relative flex flex-col rounded-card border-2 border-ink bg-white p-7 shadow-card">
-            <span className="absolute -top-3.5 left-6 rounded-full bg-ink px-4 py-1.5 text-[12px] font-bold uppercase tracking-[1px] text-[#f6cf4f]">
+          <div className="relative flex flex-col rounded-card border-2 border-navy bg-white p-7 shadow-card">
+            <span className="absolute -top-3.5 left-6 rounded-full bg-navy px-4 py-1.5 text-[12px] font-bold uppercase tracking-[1px] text-[#f6cf4f]">
               For agencies
             </span>
             <span className="text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">Agency</span>
@@ -289,13 +289,13 @@ export default function Landing() {
 
       {/* ---- Final CTA card ---- */}
       <section className="wrap py-16">
-        <div className="mx-auto max-w-[900px] rounded-card bg-ink p-10 text-center sm:p-14">
+        <div className="mx-auto max-w-[900px] rounded-card bg-navy p-10 text-center sm:p-14">
           <h2 className="text-[clamp(26px,3.6vw,38px)] text-white">Your next proposal should ship with proof.</h2>
-          <p className="mt-3 text-[17px] text-[#c9bfa8]">Set up your first collection form in the next two minutes.</p>
+          <p className="mt-3 text-[17px] text-[#b3c0da]">Set up your first collection form in the next two minutes.</p>
           <div className="mt-7">
             <Cta href="/dashboard">Start free — no card</Cta>
           </div>
-          <p className="mt-5 text-[13.5px] text-[#8f8672]">{TRUST_LINE}</p>
+          <p className="mt-5 text-[13.5px] text-[#8b98b5]">{TRUST_LINE}</p>
         </div>
       </section>
     </>
