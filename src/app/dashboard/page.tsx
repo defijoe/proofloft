@@ -187,57 +187,123 @@ export default async function Dashboard({
           <p className="dash-sub">{user.email}</p>
         </div>
 
+        {/* Onboarding — numbered step cards, shown until the first testimonial arrives. */}
         {Number(totals?.total ?? 0) === 0 && (
-          <div className="panel guide">
-            <div className="panel-head">
-              <h2>Quick start — from zero to a wall of love</h2>
-              <span className="hint">This guide disappears after your first testimonial</span>
+          <div className="mb-9">
+            <h2 className="m-0 text-[clamp(24px,3.2vw,32px)]">Let&rsquo;s get your first testimonial</h2>
+            <p className="mt-2 text-[16px] text-ink-2">
+              Three steps — under two minutes. This guide disappears after your first testimonial.
+            </p>
+            <div className="mt-6 grid gap-5">
+              {/* Step 1 — create a form (embedded right here) */}
+              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length === 0 ? "border-2 border-ink" : "border border-line"}`}>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">1</div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="m-0 text-[19px]">Create a form for a project or client</h3>
+                    {forms.length === 0 ? (
+                      <>
+                        <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
+                          Name it after the engagement — e.g. &ldquo;Acme website redesign&rdquo;.
+                          {plan === "agency" && <> (You can group forms into client workspaces below.)</>}
+                        </p>
+                        <form action={createFormAction} className="mt-4 flex flex-wrap gap-3">
+                          <input
+                            name="name"
+                            required
+                            placeholder="Form name, e.g. Acme website redesign"
+                            className="dash-input"
+                            style={{ fontSize: 16, padding: "14px 20px", flex: "1 1 260px" }}
+                          />
+                          <button className="dash-btn">Create form</button>
+                        </form>
+                      </>
+                    ) : (
+                      <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
+                        <span className="font-semibold text-[#1f7a43]">✓ Done</span> — you created{" "}
+                        <b>{forms[0].name}</b>. On to step 2.
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* Step 2 — share the link */}
+              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length > 0 ? "border-2 border-ink" : "border border-line"}`}>
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">2</div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="m-0 text-[19px]">Send the link to the people whose praise you want</h3>
+                    <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
+                      Your client after a project wraps, or their customers. They write a short testimonial,
+                      pick a star rating, and tick a consent box — no account needed on their side.
+                    </p>
+                    {forms.length > 0 && (
+                      <p className="mt-3 text-[15px]">
+                        Your link: <span className="fcode break-all">https://proofloft.com/f/{forms[0].slug}</span>
+                        {" · "}
+                        <a href={`/f/${forms[0].slug}`} target="_blank" className="flink">Open it ↗</a>
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* Step 3 — approve & embed */}
+              <div className="rounded-2xl border border-line bg-white p-6 shadow-card sm:p-7">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">3</div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="m-0 text-[19px]">Approve what you like, then show it off</h3>
+                    <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
+                      New submissions land in <b>Pending approval</b> below (you also get an email) —
+                      nothing goes public until you approve it. Every form has a hosted wall page plus an
+                      embed snippet for any website; copy both from the form row.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="panel-body">
-              <ol className="guide-steps">
-                <li>
-                  <b>Create a form</b> for a project or client below — e.g. &ldquo;Acme website redesign&rdquo;.
-                  {plan === "agency" && <> Group forms into a <b>client workspace</b> per engagement to keep things tidy.</>}
-                </li>
-                <li>
-                  <b>Share the form link</b> ({`proofloft.com/f/…`}) with the people whose praise you want —
-                  your client after a project wraps, or their customers. They write a short testimonial,
-                  pick a star rating, and tick a consent box. No account needed on their side.
-                </li>
-                <li>
-                  <b>Approve what you like.</b> New submissions land in <b>Pending approval</b> at the bottom
-                  of this page (you also get an email). Nothing goes public until you approve it.
-                </li>
-                <li>
-                  <b>Show them off.</b> Every form has a hosted wall page you can link from proposals or
-                  invoices, and an embed snippet that drops the same wall into any website — copy it from
-                  the form row below.
-                </li>
-              </ol>
-              <p className="guide-tip">
-                Tip: open your own form link and submit a test testimonial right now — you&rsquo;ll see the whole
-                loop (submit → email → approve → wall) in under a minute.
-              </p>
-            </div>
+            <p className="guide-tip mt-4">
+              Tip: open your own form link and submit a test testimonial right now — you&rsquo;ll see the whole
+              loop (submit → email → approve → wall) in under a minute.
+            </p>
           </div>
         )}
 
-        <div className="pstats">
-          <div className="pstat">
-            <div className="lbl">Testimonials</div>
-            <div className="pill black">{totals?.total ?? 0}</div>
+        {/* Stat cards — bigger numbers, one glance. */}
+        <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div className="rounded-2xl bg-white/90 p-5 shadow-card">
+            <div className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-ink" />Testimonials
+            </div>
+            <div className="mt-2 font-display text-[34px] font-bold leading-none">{totals?.total ?? 0}</div>
           </div>
-          <div className="pstat">
-            <div className="lbl">Pending approval</div>
-            <div className="pill yellow">{nPending}</div>
+          <div className="rounded-2xl bg-white/90 p-5 shadow-card">
+            <div className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-amber" />Pending
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-display text-[34px] font-bold leading-none">{nPending}</span>
+              {nPending > 0 && (
+                <span className="rounded-full bg-[#fdf3e0] px-2.5 py-1 text-[12px] font-bold text-[#7a5205]">needs review</span>
+              )}
+            </div>
           </div>
-          <div className="pstat">
-            <div className="lbl">Forms</div>
-            <div className="pill hatch">{totals?.forms ?? 0}{!paid && <em>/ 1 free</em>}</div>
+          <div className="rounded-2xl bg-white/90 p-5 shadow-card">
+            <div className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-ink-3" />Forms
+            </div>
+            <div className="mt-2 flex items-baseline gap-2">
+              <span className="font-display text-[34px] font-bold leading-none">{totals?.forms ?? 0}</span>
+              {!paid && <span className="text-[13px] text-ink-3">/ 1 free</span>}
+            </div>
           </div>
-          <div className="pstat">
-            <div className="lbl">Client workspaces</div>
-            <div className="pill line">{plan === "agency" ? workspaces.length : <em>Agency plan</em>}</div>
+          <div className="rounded-2xl bg-white/90 p-5 shadow-card">
+            <div className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">
+              <span className="h-2.5 w-2.5 rounded-full bg-[#1f7a43]" />Workspaces
+            </div>
+            <div className="mt-2 font-display text-[34px] font-bold leading-none">
+              {plan === "agency" ? workspaces.length : <span className="text-[17px] font-semibold text-ink-3">Agency plan</span>}
+            </div>
           </div>
         </div>
 
