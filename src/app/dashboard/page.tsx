@@ -196,9 +196,9 @@ export default async function Dashboard({
             </p>
             <div className="mt-6 grid gap-5">
               {/* Step 1 — create a form (embedded right here) */}
-              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length === 0 ? "border-2 border-ink" : "border border-line"}`}>
+              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length === 0 ? "border-2 border-navy" : "border border-line"}`}>
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">1</div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy font-display text-[18px] font-bold text-white">1</div>
                   <div className="min-w-0 flex-1">
                     <h3 className="m-0 text-[19px]">Create a form for a project or client</h3>
                     {forms.length === 0 ? (
@@ -228,9 +228,9 @@ export default async function Dashboard({
                 </div>
               </div>
               {/* Step 2 — share the link */}
-              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length > 0 ? "border-2 border-ink" : "border border-line"}`}>
+              <div className={`rounded-2xl bg-white p-6 shadow-card sm:p-7 ${forms.length > 0 ? "border-2 border-navy" : "border border-line"}`}>
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">2</div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy font-display text-[18px] font-bold text-white">2</div>
                   <div className="min-w-0 flex-1">
                     <h3 className="m-0 text-[19px]">Send the link to the people whose praise you want</h3>
                     <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
@@ -250,7 +250,7 @@ export default async function Dashboard({
               {/* Step 3 — approve & embed */}
               <div className="rounded-2xl border border-line bg-white p-6 shadow-card sm:p-7">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink font-display text-[18px] font-bold text-white">3</div>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy font-display text-[18px] font-bold text-white">3</div>
                   <div className="min-w-0 flex-1">
                     <h3 className="m-0 text-[19px]">Approve what you like, then show it off</h3>
                     <p className="mt-2 text-[16px] leading-relaxed text-ink-2">
@@ -273,7 +273,7 @@ export default async function Dashboard({
         <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
           <div className="rounded-2xl bg-white/90 p-5 shadow-card">
             <div className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[1px] text-ink-3">
-              <span className="h-2.5 w-2.5 rounded-full bg-ink" />Testimonials
+              <span className="h-2.5 w-2.5 rounded-full bg-navy" />Testimonials
             </div>
             <div className="mt-2 font-display text-[34px] font-bold leading-none">{totals?.total ?? 0}</div>
           </div>
