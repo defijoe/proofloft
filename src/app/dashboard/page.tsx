@@ -26,6 +26,7 @@ import {
   wallAppearanceAction,
 } from "./actions";
 import ConfirmButton from "./confirm-button";
+import CopyButton from "./copy-button";
 import { SOURCE_LABELS, sourceLabel } from "../sources";
 
 export const dynamic = "force-dynamic";
@@ -238,9 +239,9 @@ export default async function Dashboard({
                       pick a star rating, and tick a consent box — no account needed on their side.
                     </p>
                     {forms.length > 0 && (
-                      <p className="mt-3 text-[15px]">
-                        Your link: <span className="fcode break-all">https://proofloft.com/f/{forms[0].slug}</span>
-                        {" · "}
+                      <p className="mt-3 flex flex-wrap items-center gap-2 text-[15px]">
+                        <span>Your link: <span className="fcode break-all">https://proofloft.com/f/{forms[0].slug}</span></span>
+                        <CopyButton text={`https://proofloft.com/f/${forms[0].slug}`} label="Copy link" />
                         <a href={`/f/${forms[0].slug}`} target="_blank" className="flink">Open it ↗</a>
                       </p>
                     )}
@@ -420,20 +421,23 @@ export default async function Dashboard({
                   <div className="mt-1.5 grid gap-1.5">
                     <div className="fmeta" style={{ margin: 0 }}>
                       <span className="mr-1 font-bold uppercase tracking-[1px] text-ink-3">Share</span>
-                      <span className="fcode break-all">https://proofloft.com/f/{f.slug}</span>
+                      <span className="fcode break-all">https://proofloft.com/f/{f.slug}</span>{" "}
+                      <CopyButton text={`https://proofloft.com/f/${f.slug}`} />
                       {" · "}
                       <a href={`/f/${f.slug}`} target="_blank" className="flink">Open form ↗</a>
                     </div>
                     <div className="fmeta" style={{ margin: 0 }}>
                       <span className="mr-1 font-bold uppercase tracking-[1px] text-ink-3">Wall</span>
-                      <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>
+                      <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>{" "}
+                      <CopyButton text={`https://proofloft.com/w/${f.slug}`} label="Copy wall link" />
                       <span className="text-ink-3"> — link it in proposals, or embed it below</span>
                     </div>
                   </div>
                   <details className="manage">
                     <summary>Get embed code</summary>
                     <p className="fmeta" style={{ margin: "8px 0 0" }}>
-                      <span className="fcode break-all">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
+                      <span className="fcode break-all">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>{" "}
+                      <CopyButton text={`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`} label="Copy code" />
                       {" · "}
                       <a href="/docs/embed" target="_blank" className="flink">How to embed ↗</a>
                     </p>
