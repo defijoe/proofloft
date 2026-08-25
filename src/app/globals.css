@@ -1,3 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Preflight is off (corePlugins.preflight: false) so Tailwind can't reset the
+   hand-rolled design system below. But Tailwind's border-* utilities depend on
+   preflight's border reset — without it they render nothing. Restore just that: */
+*, ::before, ::after { border-style: solid; border-width: 0; }
+
 /* Proofloft design system — warm editorial. Serif display, sans body, amber accent. */
 :root {
   --bg: #faf7f2;
@@ -437,6 +446,7 @@ html, body { overflow-x: hidden; } /* safety net: nothing may widen the page */
 
   /* Dashboard: rows may wrap on narrow screens */
   .dash-wrap { padding: 0 24px; }
+  .dash-btn { white-space: normal; } /* nowrap pushes cards wider than the viewport */
   .frow { flex-wrap: wrap; }
   .frow .fright { text-align: left; }
   .fright.trow-actions { justify-content: flex-start; }
