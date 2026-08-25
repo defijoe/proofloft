@@ -6,6 +6,8 @@ module.exports = {
       colors: {
         // Brand — warm editorial. Ember is the one CTA color (white text on it).
         cta: { DEFAULT: "#b45309", hover: "#96430a" },
+        // Dark surface color — deep navy (replaced near-black, Aug 2026).
+        navy: { DEFAULT: "#1b2a4a", deep: "#131f38" },
         amber: "#e8960c",
         wheat: "#e9d8a8",
         cream: "#f7f0de",
