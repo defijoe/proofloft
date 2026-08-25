@@ -307,6 +307,49 @@ export default async function Dashboard({
           </div>
         </div>
 
+        {/* Next step — one clear action, chosen from the account's current state. */}
+        {Number(totals?.total ?? 0) > 0 && (
+          <div className="mb-6 rounded-2xl border-l-[6px] border-cta bg-white p-5 shadow-card sm:px-7">
+            <div className="text-[12px] font-bold uppercase tracking-[1.5px] text-cta">Your next step</div>
+            {nPending > 0 ? (
+              <p className="m-0 mt-1.5 text-[17px] leading-relaxed">
+                <b>{nPending} testimonial{nPending === 1 ? " is" : "s are"} waiting for your approval.</b>{" "}
+                Nothing goes public until you approve it —{" "}
+                <a href="#pending" className="flink">review {nPending === 1 ? "it" : "them"} below ↓</a>
+              </p>
+            ) : publishedItems.length === 0 ? (
+              <p className="m-0 mt-1.5 text-[17px] leading-relaxed">
+                <b>Publish your first testimonial.</b> Approve a submission when it arrives, or paste
+                praise you already have in <a href="#add" className="flink">Add a testimonial ↓</a>
+              </p>
+            ) : (
+              <p className="m-0 mt-1.5 text-[17px] leading-relaxed">
+                <b>Your wall is live.</b> Share your form link after every project wraps, and put the
+                wall where prospects see it — proposals, your site, your client&rsquo;s site.
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* The loop — always visible once you're up and running. */}
+        {Number(totals?.total ?? 0) > 0 && (
+          <div className="mb-9 grid gap-4 sm:grid-cols-3">
+            {[
+              { n: "1", t: "Share your link", d: "Send your form link to the client when a project wraps. They write, rate, and consent — no account needed." },
+              { n: "2", t: "Approve", d: "Submissions land in Pending approval below (you get an email). Only what you approve goes public." },
+              { n: "3", t: "Show it off", d: "Link the wall in proposals or embed it on any site — it updates itself with every approval." },
+            ].map((s) => (
+              <div key={s.n} className="rounded-2xl bg-white/90 p-5 shadow-card">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-navy font-display text-[16px] font-bold text-white">{s.n}</div>
+                  <h3 className="m-0 text-[17px]">{s.t}</h3>
+                </div>
+                <p className="m-0 mt-2.5 text-[14.5px] leading-relaxed text-ink-2">{s.d}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="panel">
           <div className="panel-head">
             <h2>Client workspaces</h2>
@@ -374,17 +417,27 @@ export default async function Dashboard({
                     {f.name}
                     {f.ws_name && !activeWs && <span className="ws-tag">{f.ws_name}</span>}
                   </div>
-                  <div className="fmeta">
-                    <a href={`/f/${f.slug}`} target="_blank" className="flink">Open form ↗</a>
-                    {" · "}
-                    <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>
-                    {" · "}Share: <span className="fcode">https://proofloft.com/f/{f.slug}</span>
+                  <div className="mt-1.5 grid gap-1.5">
+                    <div className="fmeta" style={{ margin: 0 }}>
+                      <span className="mr-1 font-bold uppercase tracking-[1px] text-ink-3">Share</span>
+                      <span className="fcode break-all">https://proofloft.com/f/{f.slug}</span>
+                      {" · "}
+                      <a href={`/f/${f.slug}`} target="_blank" className="flink">Open form ↗</a>
+                    </div>
+                    <div className="fmeta" style={{ margin: 0 }}>
+                      <span className="mr-1 font-bold uppercase tracking-[1px] text-ink-3">Wall</span>
+                      <a href={`/w/${f.slug}`} target="_blank" className="flink">View wall ↗</a>
+                      <span className="text-ink-3"> — link it in proposals, or embed it below</span>
+                    </div>
                   </div>
-                  <div className="fmeta">
-                    Embed the wall: <span className="fcode">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
-                    {" · "}
-                    <a href="/docs/embed" target="_blank" className="flink">How to embed ↗</a>
-                  </div>
+                  <details className="manage">
+                    <summary>Get embed code</summary>
+                    <p className="fmeta" style={{ margin: "8px 0 0" }}>
+                      <span className="fcode break-all">{`<div data-proofloft="${f.slug}"></div><script src="https://proofloft.com/embed.js" async></script>`}</span>
+                      {" · "}
+                      <a href="/docs/embed" target="_blank" className="flink">How to embed ↗</a>
+                    </p>
+                  </details>
                   <details className="manage">
                     <summary>Wall style, rename, or delete</summary>
                     <div className="manage-row">
@@ -497,7 +550,7 @@ export default async function Dashboard({
         )}
 
         {forms.length > 0 && (
-          <div className="panel">
+          <div className="panel" id="add">
             <div className="panel-head">
               <h2>Add a testimonial</h2>
               <span className="hint">Paste praise from an email or social post — it publishes straight to the wall</span>
@@ -553,7 +606,7 @@ export default async function Dashboard({
           </div>
         )}
 
-        <div className="panel dark">
+        <div className="panel dark" id="pending">
           <div className="panel-head">
             <h2>Pending approval</h2>
             <span className="count-big">{nPending}</span>
