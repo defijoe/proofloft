@@ -12,7 +12,7 @@ export default function Terms() {
       <p className="kicker">Legal</p>
       <h2 style={{ fontSize: "clamp(28px, 4vw, 38px)" }}>Terms of Service</h2>
       <div className="legal">
-        <span className="updated">Last updated: August 19, 2026</span>
+        <span className="updated">Last updated: August 28, 2026</span>
 
         <h2>1. Who we are</h2>
         <p>
@@ -39,6 +39,7 @@ export default function Terms() {
 
         <h2>4. Plans, billing &amp; refunds</h2>
         <ul>
+          <li>The Free plan costs nothing and requires no card. Paid plans are <b>Pro at $19/month</b> (or $190/year) and <b>Agency at $49/month</b> (or $490/year) — annual billing gives 2 months free.</li>
           <li>Paid plans are sold by Media Yard LLC. Payments are processed securely by <b>Stripe</b>; we never see or store your card details. Applicable sales tax or VAT may be added at checkout.</li>
           <li>Subscriptions renew automatically until cancelled. You can cancel anytime; your plan stays active until the end of the paid period.</li>
           <li>If something went wrong with a charge, email us at legal@proofloft.com and we&rsquo;ll make it right — including refunds where reasonable.</li>
@@ -50,7 +51,9 @@ export default function Terms() {
           You own the testimonials and other content collected through your forms. You grant us a
           limited license to host, store, process, and display that content solely to provide the
           Service (for example, rendering your walls and embeds). We claim no other rights to it.
-          You can export your content at any time by contacting us.
+          You can export your content at any time by contacting us. Where the testimonials you
+          collect contain your customers&rsquo; personal data, we process it on your behalf under
+          our <Link href="/legal/dpa">Data Processing Agreement</Link>, which is part of these Terms.
         </p>
 
         <h2>6. Testimonial submissions &amp; consent</h2>
@@ -127,6 +130,7 @@ export default function Terms() {
         <div className="legal-links">
           <Link href="/legal/privacy" className="btn btn-ghost">Privacy Policy →</Link>
           <Link href="/legal/ai" className="btn btn-ghost">AI Disclosure →</Link>
+          <Link href="/legal/dpa" className="btn btn-ghost">Data Processing Agreement →</Link>
         </div>
       </div>
     </section>
