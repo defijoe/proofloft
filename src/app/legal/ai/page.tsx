@@ -55,6 +55,7 @@ export default function AiDisclosure() {
         <div className="legal-links">
           <Link href="/legal/terms" className="btn btn-ghost">Terms of Service →</Link>
           <Link href="/legal/privacy" className="btn btn-ghost">Privacy Policy →</Link>
+          <Link href="/legal/dpa" className="btn btn-ghost">Data Processing Agreement →</Link>
         </div>
       </div>
     </section>
