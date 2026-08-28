@@ -84,7 +84,9 @@ export default function Support() {
           what we store (very little, by design) are in our{" "}
           <Link href="/legal/privacy">Privacy Policy</Link>,{" "}
           <Link href="/legal/terms">Terms of Service</Link>, and{" "}
-          <Link href="/legal/ai">AI Disclosure</Link>. For privacy requests, email{" "}
+          <Link href="/legal/ai">AI Disclosure</Link> — plus a{" "}
+          <Link href="/legal/dpa">Data Processing Agreement</Link> for customers whose compliance
+          programs need one. For privacy requests, email{" "}
           <a href="mailto:legal@proofloft.com">legal@proofloft.com</a>.
         </p>
 
