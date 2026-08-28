@@ -12,7 +12,7 @@ export default function Privacy() {
       <p className="kicker">Legal</p>
       <h2 style={{ fontSize: "clamp(28px, 4vw, 38px)" }}>Privacy Policy</h2>
       <div className="legal">
-        <span className="updated">Last updated: August 19, 2026</span>
+        <span className="updated">Last updated: August 28, 2026</span>
 
         <h2>1. Overview</h2>
         <p>
@@ -45,7 +45,8 @@ export default function Privacy() {
         <h2>4. Testimonial submitters</h2>
         <p>
           If you submitted a testimonial through a Proofloft form, the business that sent you the
-          form (the form owner) controls that content — we process it on their behalf. To correct or
+          form (the form owner) controls that content — we process it on their behalf under our{" "}
+          <Link href="/legal/dpa">Data Processing Agreement</Link>. To correct or
           withdraw a testimonial, contact that business, or email us at legal@proofloft.com and we
           will pass on your request and assist in removing the content where appropriate.
         </p>
@@ -104,6 +105,7 @@ export default function Privacy() {
         <div className="legal-links">
           <Link href="/legal/terms" className="btn btn-ghost">Terms of Service →</Link>
           <Link href="/legal/ai" className="btn btn-ghost">AI Disclosure →</Link>
+          <Link href="/legal/dpa" className="btn btn-ghost">Data Processing Agreement →</Link>
         </div>
       </div>
     </section>
