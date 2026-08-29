@@ -43,8 +43,10 @@ body {
 h1, h2, h3 { font-family: var(--display); font-weight: 700; letter-spacing: -0.025em; }
 a { color: inherit; }
 
-.wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
-.wrap-narrow { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+/* Side gutters as longhands — the `padding: 0 24px` shorthand was zeroing the
+   vertical padding utilities (pt-16 etc.) that section spacing relies on. */
+.wrap { max-width: 1060px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+.wrap-narrow { max-width: 860px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
 
 /* ---------- nav ---------- */
 .nav {
