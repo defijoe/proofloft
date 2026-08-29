@@ -87,6 +87,12 @@ export default async function Dashboard({
             <input name="email" type="email" required placeholder="you@company.com" className="dash-input" />
             <button className="dash-btn">{sent ? "Resend email" : "Email me a link"}</button>
           </form>
+          {!sent && (
+            <p className="signin-new">
+              <b>New here?</b> Same box — enter your email and we&rsquo;ll create your account on
+              the spot. Free plan, no card needed.
+            </p>
+          )}
         </div>
       </div>
     );
