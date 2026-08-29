@@ -369,6 +369,8 @@ a { color: inherit; }
 .acct-note { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
 .dash-input.code { flex: 1 1 110px; max-width: 150px; font-family: ui-monospace, "SF Mono", Menlo, monospace; letter-spacing: .25em; text-align: center; font-weight: 700; }
 .signin-alt { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; }
+.signin-new { font-size: 13.5px; color: #6d6a62; margin: 20px 0 0; padding-top: 16px; border-top: 1px solid rgba(29,29,31,.08); }
+.signin-new b { color: #1d1d1f; font-weight: 600; }
 /* Collapsed backup-code entry on the sign-in card (link-first flow). */
 .signin-code { margin: 0 0 18px; }
 .signin-code summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-3); text-decoration: underline; text-underline-offset: 2px; list-style: none; }
